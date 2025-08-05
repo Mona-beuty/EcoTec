@@ -1,0 +1,106 @@
+/* Contenedor principal */
+.detalle-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px;
+  gap: 40px;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Imagen principal del producto */
+.detalle-container img {
+    margin-top: 200px;
+  width: 400px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Información del producto */
+.detalle-info {
+ margin-top: 200px;
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  width: 500px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Título */
+.detalle-info h2 {
+  font-size: 1.6rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Precio */
+.detalle-info .precio {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #000;
+  margin: 20px 0;
+}
+
+/* Botón de agregar */
+.detalle-info .btn-agregar {
+  background-color: #1f4e79;
+  color: white;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 25px;
+}
+
+.detalle-info .btn-agregar:hover {
+  background-color: #163b5c;
+}
+
+/* Texto y especificaciones */
+.detalle-info .descripcion {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.detalle-info {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* Calificación */
+.detalle-info .calificacion {
+  margin-top: 30px;
+}
+
+.detalle-info .estrellas {
+  font-size: 20px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.detalle-info .estrellas:hover,
+.detalle-info .estrellas:hover ~ .estrellas {
+  color: gold;
+}
+
+/* Enlace de regreso */
+.detalle-info .volver {
+  display: block;
+  margin-top: 40px;
+  color: #555;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.detalle-info .volver:hover {
+  text-decoration: underline;
+}

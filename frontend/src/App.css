@@ -1,0 +1,153 @@
+/* App.css */
+.custom-navbar {
+  width: 100%;
+  background-color: transparent;
+  font-family: 'Arial', sans-serif;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.top-bar {
+  background: linear-gradient(90deg, #00b3b3 0%, #00b6b1 30%, #1e3a5f 30%, #1e3a5f 100%);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 30px;
+  font-size: 14px;
+  position: relative;
+}
+
+.top-bar::after {
+  content: '';
+  position: absolute;
+  left: 30%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.social-icons i,
+.top-icons i {
+  margin: 0 8px;
+  cursor: pointer;
+}
+
+.social-icons {
+  display: flex;
+  gap: 12px;
+}
+
+.top-icons {
+  display: flex;
+  gap: 15px;
+  font-size: 18px;
+}
+
+.top-bar > .left-section > span {
+  color: white;
+  font-weight: bold;
+}
+
+.main-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  margin: -8px auto 0;
+  border-radius: 10px;
+  position: relative;
+  z-index: 10;
+}
+
+.logo img {
+  height: 50px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px;
+  list-style: none;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: #002366;
+  font-weight: bold;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.search-icon {
+  font-size: 20px;
+  cursor: pointer;
+  color: #002366;
+}
+
+.account a {
+  color: #002366;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.register-btn {
+  padding: 6px 12px;
+  background-color: #00b3b3;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100px;
+}
+
+.register-btn:hover {
+  background-color: #008080;
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.social-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #03466e;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 16px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.social-icons a:hover {
+  background-color: #0056b3;
+}
+
+.top-icons a {
+  color: white;
+  transition: color 0.3s;
+}
+
+.top-icons a:hover {
+  color: #ffcc00;
+}
+
+.main-content {
+  min-height: 100vh; /* Ensure content area takes full height */
+}

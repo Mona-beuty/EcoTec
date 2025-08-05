@@ -1,0 +1,323 @@
+/* Inicio.css */
+.inicio-formulario {
+    max-width: 500px;
+    min-height: 300px;
+    margin: 50px auto;
+    margin: 200px auto 50px; /* 200px arriba, 50px abajo */
+    background-color: #EDEDED;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid black;
+    font-size: 15px;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  form h2 {
+    text-align: center;
+    margin-top: 23px;
+    margin-bottom: 15px;
+    color: black;
+    font-family: 'Arial Narrow Bold', sans-serif;
+  }
+  
+  form div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  label {
+    flex: 0 0 150px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+    position: relative;
+    left: 5%;
+  }
+  
+  input {
+    width: 250px;
+    height: 30px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+    position: relative;
+    top: 5px;
+  }
+  
+  input:focus {
+    border-color: #002366;
+    outline: none;
+  }
+  
+  span {
+    color: red;
+    font-size: 12px;
+  }
+  
+  /* Estilo para el checkbox y su label */
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .checkbox-container input[type="checkbox"] {
+    width: 15px;  /* Ajusta el ancho del checkbox */
+    height: 15px; /* Ajusta la altura del checkbox */
+    margin-right: 10px; /* Espacio entre el checkbox y el texto */
+    accent-color: #002366; /* Color del checkbox */
+  }
+  
+  .checkbox-container label {
+    font-weight: normal;
+    color: #333;
+    cursor: pointer;
+    white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  }
+  
+  .checkbox-container label span {
+    color: red;
+    font-size: 12px;
+    margin-left: 5px;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    margin-top: 20px; /* Ajusta según sea necesario */
+  }
+  
+  button {
+    width: 30%;
+    padding: 12px;
+    background-color: #002366;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #001a5b;
+  }
+  
+  .success-message {
+    display: flex;
+    align-items: center; /* Centra verticalmente */
+    justify-content: center; /* Centra horizontalmente */
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
+    text-align: center;
+  }
+  /* Agregar estos estilos a tu archivo Login.css existente */
+
+/* Estilos para el enlace "¿Has olvidado tu contraseña?" */
+.forgot-password-link {
+  width: 50%;
+  background: none !important;
+  border: none !important;
+  color: #002366 !important;
+  text-decoration: underline !important;
+  cursor: pointer !important;
+  font-size: 14px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-weight: normal !important;
+}
+
+.forgot-password-link:hover {
+  color: #001a5b !important;
+}
+
+.forgot-password-container {
+  text-align: right;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+/* Estilos para el modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #EDEDED;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid black;
+  max-width: 450px;
+  width: 90%;
+  position: relative;
+  animation: modalAppear 0.3s ease-out;
+  font-size: 15px;
+}
+
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: black;
+  font-family: 'Arial Narrow Bold', sans-serif;
+  text-align: center;
+}
+
+.modal-content p {
+  color: #333;
+  margin-bottom: 20px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.modal-content .input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.modal-content .input-group label {
+  flex: none;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+  position: static;
+  left: auto;
+}
+
+.modal-content .input-group input {
+  width: 100%;
+  height: 30px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 14px;
+  position: static;
+  top: auto;
+  box-sizing: border-box;
+}
+
+.modal-content .input-group input:focus {
+  border-color: #002366;
+  outline: none;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #999;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close-btn:hover {
+  color: #333;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.modal-button-cancel {
+  width: 30%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  transition: background-color 0.3s;
+}
+
+.modal-button-cancel:hover {
+  background-color: #e9ecef;
+}
+
+.modal-button-submit {
+  width: 30%;
+  padding: 12px;
+  background-color: #002366;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.modal-button-submit:hover {
+  background-color: #001a5b;
+}
+
+.modal-button-submit:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  background-color: #6c757d;
+}
+
+.modal-button-submit:disabled:hover {
+  background-color: #6c757d;
+}
+
+/* Mensaje de error y éxito en el modal */
+.modal-content .error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.modal-content .success-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  border-radius: 5px;
+  text-align: center;
+}

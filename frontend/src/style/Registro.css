@@ -1,0 +1,149 @@
+.formulario-1 {
+  max-width: 500px;
+  min-height: 600px;
+  margin: 200px auto 50px; /* 200px arriba, 50px abajo */
+  padding: 30px;
+  background-color: #EDEDED;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid black;
+  font-size: 15px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: black;
+  font-family: 'Arial Narrow Bold', sans-serif;
+}
+
+form div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.label-1 {
+  flex: 0 0 150px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+  position: relative;
+  left: 5%;
+}
+
+.input-1 {
+  width: 250px;
+  height: 30px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 14px;
+  position: relative;
+  top: 5px;
+}
+
+.input-1:focus {
+  border-color: #002366;
+  outline: none;
+}
+
+span {
+  color: red;
+  position: relative;
+  top: 5px;
+  font-size: 12px;
+}
+/* Estilo para el checkbox y su label */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.checkbox-container input[type="checkbox"] {
+  width: 15px;  /* Ajusta el ancho del checkbox */
+  height: 15px; /* Ajusta la altura del checkbox */
+  margin-right: 10px; /* Espacio entre el checkbox y el texto */
+  accent-color: #002366; /* Color del checkbox */
+  position: relative;
+  top: 0px;
+}
+
+.checkbox-container label {
+  font-weight: normal;
+  color: #333;
+  cursor: pointer;
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+}
+
+.checkbox-container label span {
+  color: red;
+  font-size: 12px;
+  margin-left: 5px;
+}
+.button-container {
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  margin-top: 20px; /* Ajusta según sea necesario */
+}
+
+
+button {
+  width: 30%;
+  padding: 12px;
+  background-color: #002366;
+  color: white;
+  border: none;
+  border-radius: 15px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #001a5b;
+}
+
+.error-message {
+  background-color: #d31f12b4; 
+  color: white;
+  padding: 10px 15px;
+  border-radius: 10px;
+  margin-top: 15px;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.success-message {
+  display: flex;
+  align-items: center; /* Centra verticalmente */
+  justify-content: center; /* Centra horizontalmente */
+  margin-top: 20px;
+  padding: 10px;
+  background-color:#001a5b92; 
+  color: white;
+  border: none;
+  border-radius: 15px;
+  text-align: center;
+
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.input-wrapper span.error {
+  margin-top: 4px;
+  color: red;
+  font-size: 12px;
+  position: static;
+}
+
