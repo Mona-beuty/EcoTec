@@ -1,0 +1,150 @@
+
+.mi-informacion-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+  padding: 20px;
+  margin: 200px auto 50px; /* 200px arriba, 50px abajo */
+  background-color: #F5F5F5; /* Fondo gris más visible */
+  
+}
+
+.mi-informacion-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 40%;
+  max-width: 800px;
+  border: 1px solid blaCK;
+  position: relative;
+  left: 5%;
+}
+
+.mi-informacion-card h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+  font-size: 2rem;
+}
+
+.info-section {
+  margin-bottom: 30px;
+  display: flex;
+  width: 100%; /* Cambiado de 80% a 100% */
+  flex-direction: column;
+  gap: 15px;
+}
+
+.info-field {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.info-field label {
+  width: 120px; /* Ancho fijo para labels - CORREGIDO */
+  flex-shrink: 0; /* Evita que se encoja */
+  font-weight: bold;
+  color: #555;
+  font-size: 1rem;
+}
+
+.field-value {
+  flex: 1; /* Toma el espacio restante */
+  width: auto; /* CORREGIDO - no necesita width: 100% aquí */
+}
+
+.field-value input,
+.field-value span {
+  width: 100%;
+  padding: 12px;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box; /* AGREGADO - incluye padding en el ancho */
+  /* padding-right: 100%; - ELIMINADO - esto causaba el problema */
+}
+
+.field-value input {
+  border: 2px solid #ddd;
+  transition: border-color 0.3s ease;
+}
+
+.field-value input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.field-value span {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  color: #333;
+  display: block; /* AGREGADO - asegura que se comporte como bloque */
+}
+
+.button-container {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+.edit-btn, .save-btn, .cancel-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 140px;
+}
+
+.edit-btn {
+  background-color: #243A5B;
+  color: white;
+}
+
+.edit-btn:hover {
+  background-color: #1b2a40;
+  transform: translateY(-2px);
+}
+
+.save-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.save-btn:hover {
+  background-color: #1e7e34;
+  transform: translateY(-2px);
+}
+
+.cancel-btn {
+  background-color: #6c757d;
+  color: white;
+}
+
+.cancel-btn:hover {
+  background-color: #545b62;
+  transform: translateY(-2px);
+}
+
+.loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 1.2rem;
+}
+.back-to-dashboard {
+  position: relative;
+  right: 62%;
+  top: 300px;
+}
+.back-to-dashboard a{
+  text-decoration: none;
+  color:black;
+}
