@@ -224,7 +224,7 @@ const proceedDeleteProduct = async () => {
         <h1>Productos</h1>
         <ul className="list-group list-group-flush">
           <h3>Categoría</h3>
-          {['Celulares', 'Tablets', 'Computadores', 'Reloj Inteligente', 'Audio', 'Promociones y Descuentos'].map(cat => (
+          {['Celulares', 'Tablets', 'Computadores', 'Reloj Inteligente', 'Audio','Reacondicionados', 'Promociones y Descuentos'].map(cat => (
             <li key={cat} onClick={() => handleCategoryClick(cat)}><a href="#">{cat}</a></li>
           ))}
 

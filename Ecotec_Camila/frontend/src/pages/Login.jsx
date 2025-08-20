@@ -98,6 +98,12 @@ const Login = () => {
     }
   };
 
+  const closeForgotPasswordModal = () => {
+    setShowForgotPassword(false);
+    setForgotPasswordEmail('');
+    setForgotPasswordMessage('');
+  };
+
   return (
     <>
       {/* Fondo moderno con elementos decorativos */}
@@ -114,7 +120,7 @@ const Login = () => {
           <div className="auth-login-logo-container">
             <img src={logoecotec2} alt="Logo ECOTEC" className="auth-login-logo" />
             <h1>¡Bienvenido de nuevo!</h1>
-            <p> Conéctate, aprende y cuida el planeta</p>
+            <p>Conéctate, aprende y cuida el planeta</p>
           </div>
         </div>
 
@@ -155,12 +161,8 @@ const Login = () => {
               ¿Olvidaste tu contraseña?
             </button>
 
-            {errors.general && (
-              <div className="auth-login-error-message">{errors.general}</div>
-            )}
-            {successMessage && (
-              <div className="auth-login-success-message">{successMessage}</div>
-            )}
+            {errors.general && <div className="auth-login-error-message">{errors.general}</div>}
+            {successMessage && <div className="auth-login-success-message">{successMessage}</div>}
 
             <div className="auth-login-register-link">
               <p>¿No tienes cuenta? <a href="/registro">Regístrate</a></p>
@@ -173,7 +175,7 @@ const Login = () => {
           <div className="auth-login-modal-overlay">
             <div className="auth-login-modal-content">
               <button
-                onClick={() => setShowForgotPassword(false)}
+                onClick={closeForgotPasswordModal}
                 className="auth-login-modal-close-btn"
               >
                 ×
@@ -206,7 +208,7 @@ const Login = () => {
                 <div className="auth-login-modal-buttons">
                   <button
                     type="button"
-                    onClick={() => setShowForgotPassword(false)}
+                    onClick={closeForgotPasswordModal}
                     className="auth-login-modal-button-cancel"
                   >
                     Cancelar

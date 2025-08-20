@@ -12,8 +12,7 @@ import {
 } from '../controllers/productController.js';
 import { getAllProducts } from '../controllers/productController.js'; // 👈 importa esta función
 import { registrarVisita } from '../controllers/productController.js';
-import { getMasVistosSemana } from '../controllers/productController.js';
-
+import { getMasVistosMes } from '../controllers/productController.js';
 
 
 const router = express.Router();
@@ -38,10 +37,9 @@ router.get('/categoria/:categoria', getProductsByCategory);
 
 router.get('/productos/reacondicionados', getReacondicionados);
 
+router.post('/:id/vista', registrarVisita);
 
-router.post('/visita/:id', registrarVisita);
-
-router.get('/mas-vistos-semana', getMasVistosSemana);
+router.get('/mas-vistos-mes', getMasVistosMes);
 
 export default router;
 

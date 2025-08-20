@@ -21,6 +21,8 @@ import DashboardCuentas from './pages/DashboardCuentas.jsx';
 import Ventas from './pages/Ventas.jsx';
 import Calificaciones from './pages/Calificaciones.jsx';
 import DetalleProducto from './pages/DetalleProducto.jsx';
+import ResetPassword from './components/ResetPassword.jsx'; 
+
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -30,6 +32,7 @@ createRoot(document.getElementById('root')).render(
           <Route index element={<Home />} />
           <Route path="registro" element={<Registro />} />
           <Route path="login" element={<Login />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="favoritos" element={<Favoritos />} />
           <Route path="carrito" element={<Carrito />} />
           <Route path="dashboard" element={

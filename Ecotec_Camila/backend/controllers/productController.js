@@ -196,38 +196,61 @@ export const getReacondicionados = async (req, res) => {
 };
 
 
-// Registrar visita
-export const registrarVisita = async (req, res) => {
+// Vistas
+export const registrarVisita = async (req, res) => { 
   const { id } = req.params;
 
   try {
-    await db.promise().execute(`
+    // Actualiza solo si la última visita fue hace más de 5 segundos
+    const [result] = await db.promise().execute(`
       UPDATE productos 
       SET visitas = visitas + 1, ultima_visita = CURRENT_TIMESTAMP 
       WHERE id_producto = ?
+        AND (ultima_visita IS NULL OR ultima_visita < NOW() - INTERVAL 5 SECOND)
     `, [id]);
 
-    res.json({ message: 'Visita registrada' });
+    if (result.affectedRows === 0) {
+      return res.json({ message: 'Visita ya registrada recientemente' });
+    }
+
+    res.json({ message: 'Vista registrada' });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error al registrar visita' });
   }
 };
 
-// Productos más vistos en la semana
-export const getMasVistosSemana = async (req, res) => {
+
+// Productos más vistos del mes (top 6)
+// Si no hay visitas, devuelve los últimos 6 productos registrados
+export const getMasVistosMes = async (req, res) => {
   try {
+    // Primero buscamos los más vistos en el último mes
     const [rows] = await db.promise().query(`
       SELECT * 
       FROM productos 
-      WHERE ultima_visita >= NOW() - INTERVAL 7 DAY
+      WHERE ultima_visita >= NOW() - INTERVAL 1 MONTH
       ORDER BY visitas DESC 
-      LIMIT 3
+      LIMIT 6
     `);
 
-    res.json(rows);
+    if (rows.length > 0) {
+      // Si hay productos con visitas recientes, devolverlos
+      return res.json(rows);
+    }
+
+    // Si no hay visitas, devolvemos los últimos 6 productos registrados
+    const [fallback] = await db.promise().query(`
+      SELECT * 
+      FROM productos 
+      ORDER BY id_producto DESC 
+      LIMIT 6
+    `);
+
+    res.json(fallback);
+
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Error al obtener productos más vistos de la semana' });
+    res.status(500).json({ message: 'Error al obtener productos más vistos del mes' });
   }
 };
