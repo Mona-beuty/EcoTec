@@ -1,0 +1,388 @@
+/* ========================================
+   RESET Y BASE
+   ======================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --color-principal: #14b8a6;
+  --color-secundario: #3b82f6;
+  --color-texto-principal: #1e293b;
+  --color-texto-secundario: #64748b;
+  --radio-borde: 12px;
+  --fuente-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+body {
+  font-family: var(--fuente-base);
+}
+
+/* ========================================
+   FONDO Y DECORACIÓN
+   ======================================== */
+.registro-fondo {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.circulo-principal,
+.circulo-secundario {
+  position: absolute;
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  animation: float 6s ease-in-out infinite;
+}
+
+.circulo-principal {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle at 30% 30%, #20B2AA, #4FD1C7, #87CEEB, #E0F6FF);
+  opacity: 0.8;
+  top: -100px;
+  right: -100px;
+}
+
+.circulo-secundario {
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle at 60% 40%, #20B2AA, #87CEEB, #E0F6FF);
+  opacity: 0.6;
+  bottom: -50px;
+  left: -50px;
+  animation-direction: reverse;
+  animation-duration: 8s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+/* ========================================
+   CONTENEDOR PRINCIPAL
+   ======================================== */
+.contenedor-principal {
+  display: flex;
+  width: 80%;
+  max-width: 1200px;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  min-height: 600px;
+  margin-top: 200px;
+  position: relative;
+  z-index: 10;
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================
+   PANEL IZQUIERDO
+   ======================================== */
+.panel-izquierdo {
+  flex: 1;
+  background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+  padding: 20px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.contenido-info {
+  max-width: none;   /* o súbelo a 800px si quieres un tope */
+  width: 100%;
+}
+
+
+.titulo-principal {
+  text-align: center;
+  margin-top: 40px;
+  
+}
+
+.logo-principal {
+  width: clamp(200px, 90%, 700px);  /* crece hasta 900px, adaptativo */
+  height: auto;
+  margin-left: 96px;                   /* centra */
+  display: block;
+
+  /* elimina el margin-left anterior */
+}
+.subtitulo-principal {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color:  #0a2540;
+  margin-top: 250px;
+  margin-bottom: 16px;
+}
+
+.descripcion {
+  color: var(--color-texto-secundario);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-top: 65px;
+  margin-bottom: 32px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.iconos-container {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  margin-top: 30px;
+}
+
+.icono {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  margin-top: 30px;
+}
+
+.icono:hover { transform: scale(1.1); }
+
+.icono-1 { background: linear-gradient(135deg, #dcfdf7, #a7f3d0); color: #059669; }
+.icono-2 { background: linear-gradient(135deg, #dbeafe, #93c5fd); color: #2563eb; }
+.icono-3 { background: linear-gradient(135deg, #f3e8ff, #c4b5fd); color: #7c3aed; }
+
+
+/* ========================================
+   PANEL DERECHO - FORMULARIO
+   ======================================== */
+.panel-derecho {
+  flex: 1;
+  padding: 48px 32px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.formulario-header {
+  margin-bottom: 16px;
+}
+
+.formulario-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0a2540;
+  margin-bottom: 15px;
+}
+
+.subtitulo {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--color-texto-secundario);
+  
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.fila-inputs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 16px;
+}
+
+.input-moderno,
+.input-moderno-full {
+  width: 100%;
+  padding: 14px 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radio-borde);
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-moderno:focus,
+.input-moderno-full:focus {
+  border-color: var(--color-principal);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+}
+
+.input-moderno::placeholder,
+.input-moderno-full::placeholder {
+  color: #9ca3af;
+}
+
+.error-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: #ef4444;
+  margin-top: 4px;
+}
+
+/* ========================================
+   CHECKBOX Y BOTÓN
+   ======================================== */
+.checkbox-moderno {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.checkbox-input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--color-principal);
+  margin-top: 2px;
+  cursor: pointer;
+}
+
+.checkbox-label {
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.5;
+}
+label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-texto-principal);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.btn-registro {
+  width: 100%;
+  background: linear-gradient(135deg, var(--color-principal), var(--color-secundario));
+  color: #fff;
+  padding: 16px 24px;
+  border: none;
+  border-radius: var(--radio-borde);
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-registro:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.btn-registro:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.3);
+}
+
+/* ========================================
+   MENSAJES
+   ======================================== */
+.error-message,
+.success-message {
+  padding: 12px 16px;
+  border-radius: var(--radio-borde);
+  text-align: center;
+  font-size: 14px;
+}
+
+.error-message {
+  background: linear-gradient(135deg, #fef2f2, #fee2e2);
+  border: 1px solid #fecaca;
+  color: #dc2626;
+}
+
+.success-message {
+  background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+  border: 1px solid #bbf7d0;
+  color: #16a34a;
+}
+
+/* ========================================
+   LINK LOGIN
+   ======================================== */
+.login-link {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.login-link p {
+  color: var(--color-texto-secundario);
+  font-size: 14px;
+}
+
+.login-link a {
+  color: var(--color-principal);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.login-link a:hover {
+  color: #0f766e;
+  text-decoration: underline;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 1024px) {
+  .contenedor-principal {
+    flex-direction: column;
+    max-width: 600px;
+    min-height: auto;
+  }
+  .panel-izquierdo, .panel-derecho {
+    padding: 40px 30px;
+  }
+  .titulo-principal {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .registro-fondo { padding: 15px; }
+  .fila-inputs { grid-template-columns: 1fr; }
+  .panel-izquierdo, .panel-derecho { padding: 30px 20px; }
+  .contenedor-principal { border-radius: 16px; max-width: none; }
+  .circulo-principal { width: 300px; height: 300px; top: -80px; right: -80px; }
+  .circulo-secundario { width: 200px; height: 200px; bottom: -40px; left: -40px; }
+  .titulo-principal { font-size: 2rem; }
+  .descripcion { font-size: 1rem; }
+}
+
+@media (max-width: 480px) {
+  .registro-fondo { padding: 10px; }
+  .panel-izquierdo, .panel-derecho { padding: 25px 15px; }
+  .formulario-header h2 { font-size: 1.5rem; }
+  .titulo-principal { font-size: 1.75rem; }
+  .descripcion { font-size: 0.95rem; }
+  .input-moderno, .input-moderno-full { padding: 12px 14px; }
+  .btn-registro { padding: 14px 20px; }
+  .contenedor-principal { border-radius: 12px; }
+}
