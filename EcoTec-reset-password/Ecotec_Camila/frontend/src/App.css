@@ -1,0 +1,436 @@
+/* App.css - VERSIÓN CORREGIDA COMPLETA */
+.custom-navbar {
+  width: 100%;
+  background-color: transparent;
+  font-family: 'Arial', sans-serif;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  
+}
+
+.top-bar {
+  background: linear-gradient(90deg, #00b3b3 0%, #00b6b1 30%, #1e3a5f 30%, #1e3a5f 100%);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 30px;
+  font-size: 14px;
+  position: relative;
+ 
+}
+
+.top-bar::after {
+  content: '';
+  position: absolute;
+  left: 30%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: rgba(255, 255, 255, 0.3);
+  
+}
+
+.social-icons i,
+.top-icons i {
+  margin: 0 8px;
+  cursor: pointer;
+}
+
+.social-icons {
+  display: flex;
+  gap: 12px;
+}
+
+.top-icons {
+  display: flex;
+  gap: 15px;
+  font-size: 18px;
+}
+
+.top-bar > .left-section > span {
+  color: white;
+  font-weight: bold;
+}
+
+/* MAIN NAVBAR - CORREGIDO */
+.main-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 40px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 85%;
+  max-width: 1200px;
+  margin: -5px auto 0;
+  border-radius: 12px;
+  position: relative;
+  z-index: 50;
+  min-height: 60px;
+}
+
+/* ========== LOGO SECTION ========== */
+.logo {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 45px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* ========== NAVIGATION LINKS ========== */
+.nav-links {
+  display: flex;
+  gap: 40px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.nav-links li {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: #002366;
+  font-weight: 600;
+  font-size: 18px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.nav-links li a:hover {
+  color: #00b3b3;
+ 
+}
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.search-icon {
+  font-size: 20px;
+  cursor: pointer;
+  color: #002366;
+}
+
+.account a {
+  color: #002366;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.register-btn {
+  padding: 6px 12px;
+  background-color: #00b3b3;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100px;
+}
+
+.register-btn:hover {
+  background-color: #008080;
+}
+
+.left-section {
+  
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.social-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #03466e;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-size: 16px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.social-icons a:hover {
+  background-color: #0056b3;
+}
+
+.top-icons a {
+  color: white;
+  transition: color 0.3s;
+}
+
+.top-icons a:hover {
+  color: #ffcc00;
+}
+
+.main-content {
+  min-height: 100vh;
+}
+
+/* ========== DROPDOWN STYLES - COMPLETAMENTE NUEVO ========== */
+
+/* Dropdown Container */
+.dropdown-container {
+  position: relative;
+}
+
+/* Dropdown Trigger */
+.dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  color: #002366;
+  font-weight: bold;
+  padding: 5px 0;
+}
+
+.dropdown-trigger:hover {
+  color: #00b3b3;
+}
+
+/* Dropdown Arrow */
+.dropdown-arrow {
+  font-size: 10px;
+  transition: transform 0.3s ease;
+  margin-left: 3px;
+}
+
+.dropdown-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu - SOLUCIÓN PRINCIPAL */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: -20px;
+  background-color: white;
+  min-width: 280px;
+  border-radius: 8px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  z-index: 9999; /* MUY ALTO */
+  padding: 15px 0;
+  margin-top: 15px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  
+  /* CRUCIAL: Estas propiedades */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+/* Mostrar dropdown */
+.dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Flecha del dropdown */
+.dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 40px;
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid white;
+  z-index: 10000;
+}
+
+/* Dropdown Items */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  color: #002366;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+  color: #00b3b3;
+  border-left-color: #00b3b3;
+  transform: translateX(5px);
+  text-decoration: none;
+}
+
+.dropdown-item i {
+  color: #00b3b3;
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+/* Hover effect for nav links */
+.nav-links li a:hover {
+  color: #00b3b3;
+  transition: color 0.3s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    min-width: 250px;
+    left: -50px;
+  }
+  
+  .dropdown-menu::before {
+    left: 70px;
+  }
+}
+/* ESTILOS PARA SUBMENÚS - Agregar al final de tu App.css */
+
+/* Container para items con submenú */
+.dropdown-item-with-submenu {
+  position: relative;
+}
+
+/* Trigger del submenú */
+.submenu-trigger {
+  justify-content: space-between;
+  cursor: pointer;
+  position: relative;
+}
+
+.submenu-trigger:hover {
+  background-color: #f8f9fa;
+  color: #00b3b3;
+}
+
+/* Flecha del submenú */
+.submenu-arrow {
+  font-size: 10px;
+  transition: transform 0.3s ease;
+  margin-left: auto;
+}
+
+.submenu-arrow.rotated {
+  transform: rotate(90deg);
+}
+
+/* Contenedor del submenú */
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background-color: #f8f9fb;
+  margin-left: 20px;
+  border-radius: 6px;
+  opacity: 0;
+}
+
+.submenu.show {
+  max-height: 300px;
+  opacity: 1;
+  padding: 8px 0;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+/* Items del submenú */
+.submenu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 15px;
+  color: #002366;
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  border-left: 2px solid transparent;
+  margin: 2px 0;
+}
+
+.submenu-item:hover {
+  background-color: #e3f2fd;
+  color: #00b3b3;
+  border-left-color: #00b3b3;
+  text-decoration: none;
+  transform: translateX(3px);
+}
+
+.submenu-item i {
+  color: #00b3b3;
+  font-size: 14px;
+  width: 16px;
+  text-align: center;
+}
+
+/* Animación para el submenú */
+@keyframes slideDownSubmenu {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+  to {
+    max-height: 300px;
+    opacity: 1;
+  }
+}
+
+/* Ajuste para el dropdown principal para acomodar submenús */
+.dropdown-menu {
+  min-width: 320px; /* Aumentado para acomodar submenús */
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* Separador visual entre secciones */
+.dropdown-item-with-submenu:not(:last-child) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  margin-bottom: 5px;
+  padding-bottom: 5px;
+}
+
+/* Hover effect mejorado para items principales */
+.dropdown-item:not(.submenu-trigger):hover {
+  background-color: #f8f9fa;
+  color: #00b3b3;
+  border-left-color: #00b3b3;
+  transform: translateX(5px);
+}
+
+/* Responsive para submenús */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    min-width: 280px;
+  }
+  
+  .submenu-item {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+}
