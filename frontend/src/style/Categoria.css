@@ -1,0 +1,125 @@
+/* ===== Estilos de Categoría ===== */
+.cat-wrap {
+  padding: 150px;
+  background-color: #ffffff;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cat-wrap h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #002366;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+/* Grid de productos (sin carrusel) */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 40px;
+  justify-items: center;
+}
+
+/* Tarjeta de producto */
+.featured-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  text-align: center;
+  width: 100%;
+  max-width: 280px;
+  position: relative;
+}
+
+.featured-card:hover {
+  transform: translateY(-6px);
+}
+
+/* Icono de favorito (estrella arriba a la derecha) */
+.card-header {
+  position: absolute;
+  top: -8px;
+  right: 3px;
+}
+
+
+/* Imagen */
+.card-img-top {
+  width: 100%;
+  max-height: 180px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+/* Nombre */
+.card-text {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+  margin: 0.5rem 0;
+}
+
+/* Precio */
+.price {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 1rem;
+}
+
+/* Botón */
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: #00b86b;
+  color: white;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #009e5c;
+}
+
+/* Estilo Favoritos */
+
+.favorites-icon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 30px;
+  color: #002366;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  cursor: pointer;
+}
+.favorites-icon:hover {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+.mensaje-flotante {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #323232;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  animation: fadeInOut 3s ease forwards;
+  z-index: 1000;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateY(-10px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
