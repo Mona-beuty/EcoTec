@@ -1,0 +1,87 @@
+.h2 {
+    
+  margin: 55px auto 50px; /* 200px arriba, 50px abajo */
+    font-size: 30px;
+    position: absolute;
+    left: 60px;
+    top: 130px;
+}
+
+.container1 {
+    width: 900px; /* Ajusta para dar más espacio a tres tarjetas */
+    position: absolute;
+    top: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+    
+  margin: 100px auto 50px; /* 200px arriba, 50px abajo */
+}
+
+.card1 {
+    height: 200px;
+    border-radius: 10px;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #D9D9D9;
+}
+
+.card1-body {
+    text-align: center;
+}
+
+.card1-body i {
+    font-size: 120px;
+    color: rgba(0, 0, 0, 0.549);
+    margin-bottom: 15px;
+}
+
+.card1-title {
+    font-size: 18px;
+    color: #333;
+    margin: 0;
+    margin-bottom: 40px;
+}
+
+/* Espaciado uniforme entre tarjetas */
+.row {
+    margin-left: -15px;
+    margin-right: -15px;
+}
+
+.col-sm-4, .col-sm-6 {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 15px;
+}
+
+
+
+.h4 {
+    font-size: 20px;
+    position: fixed;
+    left: 20px;
+    bottom: 0px;
+    margin: 0;
+}
+.btn-cerrar-sesion {
+  background-color: #001a5be9;
+  color: white;
+  padding: 10px 16px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 0 auto 40px;
+  display: block;
+  width: fit-content;
+  position: relative;
+  top: 750px;
+  right: 42%;;
+
+}
+
+.btn-cerrar-sesion:hover {
+  background-color: #03184f;
+}
