@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import "../style/Carrito.css";
 
@@ -6,6 +7,8 @@ const Carrito = () => {
   const { cart, updateItem, removeItem, clear, total, loading } = useCart();
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(""); // ⚡ mensaje de error stock
+  const navigate = useNavigate();
 
   const handleDeleteClick = (item) => {
     setItemToDelete(item);
@@ -23,6 +26,16 @@ const Carrito = () => {
   const cancelDelete = () => {
     setShowConfirmDialog(false);
     setItemToDelete(null);
+  };
+
+  // ⚡ Manejar actualización de cantidad con validación de stock
+  const handleUpdate = async (id_carrito, cantidad) => {
+    try {
+      await updateItem(id_carrito, cantidad);
+      setErrorMsg(""); // limpiar error si todo salió bien
+    } catch (error) {
+      setErrorMsg(error.response?.data?.message || "Error al actualizar cantidad");
+    }
   };
 
   if (loading) return <p>Cargando carrito...</p>;
@@ -56,18 +69,14 @@ const Carrito = () => {
                 {/* Cantidad */}
                 <div className="carrito-cantidad">
                   <button
-                    onClick={() =>
-                      updateItem(item.id_carrito, item.cantidad - 1)
-                    }
+                    onClick={() => handleUpdate(item.id_carrito, item.cantidad - 1)}
                     disabled={item.cantidad <= 1}
                   >
                     –
                   </button>
                   <span>{item.cantidad}</span>
                   <button
-                    onClick={() =>
-                      updateItem(item.id_carrito, item.cantidad + 1)
-                    }
+                    onClick={() => handleUpdate(item.id_carrito, item.cantidad + 1)}
                   >
                     +
                   </button>
@@ -82,6 +91,9 @@ const Carrito = () => {
                 </button>
               </div>
             ))}
+
+            {/* ⚡ Mostrar mensaje de error de stock */}
+            {errorMsg && <p className="carrito-error">{errorMsg}</p>}
           </div>
 
           {/* 📊 Sección derecha: Resumen */}
@@ -111,7 +123,12 @@ const Carrito = () => {
               <span>${total.toLocaleString()}</span>
             </div>
 
-            <button className="btn-comprar">Continuar compra</button>
+            <button
+              className="btn-comprar"
+              onClick={() => navigate("/pedido")}
+            >
+              Continuar compra
+            </button>
           </div>
         </div>
       )}

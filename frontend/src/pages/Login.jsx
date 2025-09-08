@@ -75,7 +75,7 @@ const Login = () => {
     setForgotPasswordMessage('');
 
     try {
-      await axios.post('http://localhost:5000/api/forgot-password', {
+      await axios.post('http://localhost:5000/api/auth/forgot-password', {
         email: forgotPasswordEmail
       });
 

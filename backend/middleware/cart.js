@@ -1,4 +1,4 @@
-// middleware/cartMiddleware.js
+
 
 // Middleware para validar parámetros numéricos
 export const validateNumericParam = (paramName) => {
@@ -103,9 +103,7 @@ export const logCartAction = (action) => {
   return (req, res, next) => {
     const userId = req.user?.id_usuario;
     const timestamp = new Date().toISOString();
-    
-    console.log(`[CART ${action.toUpperCase()}] ${timestamp} - Usuario: ${userId}`);
-    
+
     // Guardar la acción para logging posterior
     req.cartAction = {
       action,
@@ -162,7 +160,6 @@ export const handleCartSuccess = (req, res, next) => {
   
   res.json = function(body) {
     if (req.cartAction && body.success) {
-      console.log(`[CART SUCCESS] ${req.cartAction.action} - Usuario: ${req.cartAction.userId}`);
     }
     return originalJson.call(this, body);
   };

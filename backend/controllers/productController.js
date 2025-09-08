@@ -146,8 +146,6 @@ export const deleteProduct = async (req, res) => {
   }
 };
 
-
-
 export const getProductStats = async (req, res) => {
   try {
     const [totalProductos] = await db.promise().query('SELECT SUM(cantidad) as total FROM productos');
@@ -220,8 +218,6 @@ export const registrarVisita = async (req, res) => {
   }
 };
 
-
-// Productos más vistos del mes (top 6)
 // Si no hay visitas, devuelve los últimos 6 productos registrados
 export const getMasVistosMes = async (req, res) => {
   try {
@@ -254,7 +250,8 @@ export const getMasVistosMes = async (req, res) => {
     res.status(500).json({ message: 'Error al obtener productos más vistos del mes' });
   }
 };
-////////////////////////////////////////////////
+
+// Categorizar los productos
 
 const slugToCategoria = {
   celulares: 'Celulares',

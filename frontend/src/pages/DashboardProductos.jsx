@@ -29,7 +29,20 @@ const DashboardProductos = () => {
         const response = await axios.get('http://localhost:5000/api/productos/stats', {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setStats(response.data);
+        
+        // 🔥 TRANSFORMACIÓN DE DATOS - Aquí está la solución
+        const transformedData = {
+          ...response.data,
+          // Transformar para que coincidan los nombres de campos
+          productosPorCategoria: response.data.productosPorCategoria.map(item => ({
+            categoria: item.categoria,
+            cantidad: item.total,        // total → cantidad
+            valor: item.valorTotal       // valorTotal → valor
+          }))
+        };
+        
+        console.log('Datos transformados:', transformedData); // Para debug
+        setStats(transformedData);
       } catch (error) {
         console.error('Error al obtener estadísticas:', error);
       }
@@ -102,7 +115,7 @@ const DashboardProductos = () => {
             <TrendingUp className="icon-title" /> Valor Monetario por Categoría
           </h3>
           <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={stats?.valorPorCategoria || []}>
+            <BarChart data={stats?.productosPorCategoria || []}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="categoria" />
               <YAxis tickFormatter={formatNumberShort} />
@@ -120,13 +133,13 @@ const DashboardProductos = () => {
             <Package className="icon-title" /> Nivel de Stock por Categoría
           </h3>
           <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={stats?.stockPorCategoria || []}>
+            <BarChart data={stats?.productosPorCategoria || []}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="categoria" />
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="stock" fill="#F87171" />
+              <Bar dataKey="cantidad" fill="#F87171" />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -136,7 +149,7 @@ const DashboardProductos = () => {
             <DollarSign className="icon-title" /> Curva de Valor en el Inventario
           </h3>
           <ResponsiveContainer width="100%" height={250}>
-            <AreaChart data={stats?.valorPorCategoria || []}>
+            <AreaChart data={stats?.productosPorCategoria || []}>
               <defs>
                 <linearGradient id="colorValor" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#8B5CF6" stopOpacity={0.8} />

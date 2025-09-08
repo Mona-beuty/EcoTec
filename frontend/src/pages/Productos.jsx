@@ -28,26 +28,39 @@ const Productos = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [searchCode, setSearchCode] = useState('');
 
-  const handleCategoryClick = async (category) => {
-    setSelectedCategory(category);
-    setView('productos');
-    const token = localStorage.getItem('token');
+// Mapeo de categoría visible → slug válido
+const categoryToSlug = {
+  'Celulares': 'celulares',
+  'Tablets': 'tablets',
+  'Computadores': 'portatiles',
+  'Relojes Inteligentes': 'relojes',
+  'Audio': 'audio',
+  'Promociones': 'promociones',
+  'Reacondicionados': 'reacondicionados'
+};
 
-    try {
-      const response = await axios.get(`http://localhost:5000/api/productos/categoria/${category}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+const handleCategoryClick = async (category) => {
+  setSelectedCategory(category);
+  setView('productos');
 
-      const productosConId = response.data.map(producto => ({
-        ...producto,
-        id: producto.id_producto
-      }));
+  const slug = categoryToSlug[category];
+  if (!slug) {
+    console.error(`No hay slug definido para la categoría: ${category}`);
+    return;
+  }
 
-      setProducts(productosConId);
-    } catch (error) {
-      console.error('Error al obtener productos:', error);
-    }
-  };
+  try {
+    const response = await axios.get(`http://localhost:5000/api/productos/categoria/slug/${slug}`);
+    const productosConId = response.data.map(producto => ({
+      ...producto,
+      id: producto.id_producto
+    }));
+    setProducts(productosConId);
+  } catch (error) {
+    console.error('Error al obtener productos:', error);
+  }
+};
+
 
   const enableEdit = (product) => {
     setEditProduct(product);
@@ -224,7 +237,7 @@ const proceedDeleteProduct = async () => {
         <h1>Productos</h1>
         <ul className="list-group list-group-flush">
           <h3>Categoría</h3>
-          {['Celulares', 'Tablets', 'Computadores', 'Reloj Inteligente', 'Audio','Reacondicionados', 'Promociones y Descuentos'].map(cat => (
+          {['Celulares', 'Tablets', 'Computadores', 'Relojes Inteligentes', 'Audio','Reacondicionados', 'Promociones'].map(cat => (
             <li key={cat} onClick={() => handleCategoryClick(cat)}><a href="#">{cat}</a></li>
           ))}
 

@@ -3,7 +3,6 @@ import { authenticateToken } from '../middleware/auth.js';
 import { upload } from '../middleware/upload.js';
 import { getProductStats } from '../controllers/productController.js';
 import {
-  getProductsByCategory,
   addProduct,
   updateProduct,
   deleteProduct,
@@ -34,7 +33,6 @@ router.delete('/:id', authenticateToken, deleteProduct);
 router.get('/stats', authenticateToken, getProductStats);
 
 // GET /api/productos/categoria/:categoria - por categoría, sin token
-// Buscar por slug amigable
 router.get('/categoria/slug/:slug', getProductsBySlug);
 
 router.get('/reacondicionados', getReacondicionados);
