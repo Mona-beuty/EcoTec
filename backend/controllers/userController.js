@@ -6,7 +6,7 @@ import { sanitizeUserInput, validatePassword, getUserByIdDB } from '../helpers/u
 // Obtener mi perfil
 export const getMyProfile = async (req, res) => {
   try {
-    const usuario = await getUserByIdDB(req.user.id);
+    const usuario = await getUserByIdDB(req.user.id_usuario);
     if (!usuario) return res.status(404).json({ message: 'Usuario no encontrado' });
 
     res.json(usuario);
@@ -19,7 +19,8 @@ export const getMyProfile = async (req, res) => {
 // Obtener usuario por ID (solo puede ver su propio perfil)
 export const getUserById = async (req, res) => {
   const { id } = req.params;
-  if (req.user.id !== parseInt(id)) return res.status(403).json({ message: 'No tienes permisos para acceder a esta información' });
+  if (req.user.id_usuario !== parseInt(id)) 
+    return res.status(403).json({ message: 'No tienes permisos para acceder a esta información' });
 
   try {
     const usuario = await getUserByIdDB(id);
@@ -37,7 +38,7 @@ export const updateUserInfo = async (req, res) => {
   try {
     let { id_usuario, nombre, apellido, celular } = req.body;
 
-    if (req.user.id !== parseInt(id_usuario))
+    if (req.user.id_usuario !== parseInt(id_usuario))
       return res.status(403).json({ message: 'No tienes permisos para actualizar esta información' });
 
     // Sanitizamos la entrada
@@ -72,7 +73,7 @@ export const updateUserInfo = async (req, res) => {
 // Actualizar contraseña
 export const updatePassword = async (req, res) => {
   const { currentPassword, newPassword } = req.body;
-  const userId = req.user.id;
+  const userId = req.user.id_usuario;
 
   if (!currentPassword || !newPassword) return res.status(400).json({ message: 'Se requiere la contraseña actual y la nueva' });
 

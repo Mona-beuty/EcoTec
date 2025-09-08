@@ -97,7 +97,7 @@ export default function Favoritos() {
             <div key={p.id_producto} className="featured-card">
               <div className="card-header">
                 <span
-                  className="favorites-icon"
+                  className="favorite-icon"
                   onClick={() => quitarFavorito(p.id_producto)}
                   style={{ cursor: "pointer" }}
                 >

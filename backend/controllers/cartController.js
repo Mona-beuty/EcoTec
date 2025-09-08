@@ -5,8 +5,7 @@ const getUserId = (req) => {
   return req.user?.id_usuario || req.user?.id;
 };
 
-// ✅ Obtener carrito de un usuario
-// ✅ Obtener carrito de un usuario
+//  Obtener carrito de un usuario
 export const getCart = async (req, res) => {
   try {
     const userId = getUserId(req);
@@ -50,14 +49,13 @@ export const getCart = async (req, res) => {
 };
 
 
-
-// ✅ Agregar producto al carrito
+//  Agregar producto al carrito con validación de stock
 export const addToCart = async (req, res) => {
   const { id_producto, cantidad = 1 } = req.body;
 
   try {
     const userId = getUserId(req);
-    
+
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -65,9 +63,9 @@ export const addToCart = async (req, res) => {
       });
     }
 
-    // Verificar si el producto existe
+    // Verificar si el producto existe y obtener stock
     const [productExists] = await db.promise().query(
-      "SELECT id_producto, nombre, precio FROM productos WHERE id_producto = ?",
+      "SELECT id_producto, nombre, precio, cantidad AS stock FROM productos WHERE id_producto = ?",
       [id_producto]
     );
 
@@ -78,6 +76,8 @@ export const addToCart = async (req, res) => {
       });
     }
 
+    const producto = productExists[0];
+
     // ¿Ya existe este producto en el carrito?
     const [existingItem] = await db.promise().query(
       "SELECT id_carrito, cantidad FROM carrito WHERE id_usuario = ? AND id_producto = ?",
@@ -87,6 +87,14 @@ export const addToCart = async (req, res) => {
     if (existingItem.length > 0) {
       // Si existe → aumentar cantidad
       const newQuantity = existingItem[0].cantidad + cantidad;
+
+      if (newQuantity > producto.stock) {
+        return res.status(400).json({
+          success: false,
+          message: `Stock insuficiente. Solo hay ${producto.stock} unidades disponibles`
+        });
+      }
+
       await db.promise().query(
         "UPDATE carrito SET cantidad = ? WHERE id_usuario = ? AND id_producto = ?",
         [newQuantity, userId, id_producto]
@@ -100,6 +108,13 @@ export const addToCart = async (req, res) => {
       });
     } else {
       // Si no existe → insertar
+      if (cantidad > producto.stock) {
+        return res.status(400).json({
+          success: false,
+          message: `Stock insuficiente. Solo hay ${producto.stock} unidades disponibles`
+        });
+      }
+
       await db.promise().query(
         "INSERT INTO carrito (id_usuario, id_producto, cantidad) VALUES (?, ?, ?)",
         [userId, id_producto, cantidad]
@@ -122,14 +137,15 @@ export const addToCart = async (req, res) => {
   }
 };
 
-// ✅ Actualizar cantidad
+
+//  Actualizar cantidad con validación de stock
 export const updateCartItem = async (req, res) => {
   const { id_carrito } = req.params;
   const { cantidad } = req.body;
 
   try {
     const userId = getUserId(req);
-    
+
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -137,9 +153,12 @@ export const updateCartItem = async (req, res) => {
       });
     }
 
-    // Verificar que el item pertenece al usuario
+    // Verificar que el item pertenece al usuario y obtener producto
     const [itemExists] = await db.promise().query(
-      "SELECT id_carrito FROM carrito WHERE id_carrito = ? AND id_usuario = ?",
+      `SELECT c.id_carrito, c.id_producto, p.cantidad AS stock 
+       FROM carrito c
+       JOIN productos p ON c.id_producto = p.id_producto
+       WHERE c.id_carrito = ? AND c.id_usuario = ?`,
       [id_carrito, userId]
     );
 
@@ -147,6 +166,15 @@ export const updateCartItem = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "Item del carrito no encontrado"
+      });
+    }
+
+    const item = itemExists[0];
+
+    if (cantidad > item.stock) {
+      return res.status(400).json({
+        success: false,
+        message: `Stock insuficiente. Solo hay ${item.stock} unidades disponibles`
       });
     }
 
@@ -170,7 +198,8 @@ export const updateCartItem = async (req, res) => {
   }
 };
 
-// ✅ Eliminar un producto
+
+//  Eliminar un producto
 export const removeFromCart = async (req, res) => {
   const { id_carrito } = req.params;
 
@@ -216,7 +245,7 @@ export const removeFromCart = async (req, res) => {
   }
 };
 
-// ✅ Vaciar carrito
+//  Vaciar carrito
 export const clearCart = async (req, res) => {
   try {
     const userId = getUserId(req);
@@ -248,7 +277,7 @@ export const clearCart = async (req, res) => {
   }
 };
 
-// ✅ Nueva función: Obtener resumen del carrito (solo totales)
+//  Nueva función: Obtener resumen del carrito (solo totales)
 export const getCartSummary = async (req, res) => {
   try {
     const userId = getUserId(req);

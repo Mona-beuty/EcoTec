@@ -3,7 +3,7 @@ import db from '../config/db.js';
 // Agregar producto a favoritos
 export const agregarFavorito = async (req, res) => {
   const { productoId } = req.params;
-  const usuarioId = req.user.id; // ✅ viene del token
+  const usuarioId = req.user.id_usuario; //  viene del token
 
   try {
     await db.promise().query(
@@ -23,7 +23,7 @@ export const agregarFavorito = async (req, res) => {
 
 // Obtener favoritos del usuario autenticado
 export const obtenerFavoritos = async (req, res) => {
-  const usuarioId = req.user.id; // ✅ del token
+  const usuarioId = req.user.id_usuario; 
 
   try {
     const [rows] = await db.promise().query(
@@ -43,7 +43,7 @@ export const obtenerFavoritos = async (req, res) => {
 // Eliminar producto de favoritos
 export const eliminarFavorito = async (req, res) => {
   const { productoId } = req.params;
-  const usuarioId = req.user.id; // ✅ del token
+  const usuarioId = req.user.id_usuario; //  del token
 
   try {
     await db.promise().query(

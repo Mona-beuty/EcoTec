@@ -57,7 +57,7 @@ const ResetPassword = () => {
     setMessage('');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/reset-password', {
+      const res = await axios.post('http://localhost:5000/api/auth/reset-password', {
         token,
         nuevaPassword: formValues.password
       });

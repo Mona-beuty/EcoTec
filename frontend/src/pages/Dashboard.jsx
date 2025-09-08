@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import React from 'react';
 import { Link } from 'react-router-dom'; // Importa Link
 import '../style/Dashboard.css';
@@ -12,7 +11,7 @@ const Dashboard = () => {
       <div className="container1">
         <div className="row">
           <div className="col-sm-6 mb-3">
-            <Link to="/mi-informacion"> {/* Ruta a la que deseas navegar */}
+            <Link to="/mi-informacion"> 
               <div className="card1">
                 <div className="card1-body">
                   <i className="bi bi-person-gear"></i>
@@ -22,23 +21,28 @@ const Dashboard = () => {
             </Link>
           </div>
           <div className="col-sm-6 mb-3">
-            <div className="card1">
-              <div className="card1-body">
-                <i className="bi bi-calendar-week"></i>
-                <h5 className="card1-title">Detalles de pedido</h5>
+            <Link>
+              <div className="card1">
+                <div className="card1-body">
+                  <i className="bi bi-calendar-week"></i>
+                  <h5 className="card1-title">Detalles de pedido</h5>
+                </div>
+              </div><br />
+            </Link>
+          </div>
+    
+          <div className="col-sm-6 mb-3">
+            <Link to="/favoritos"> 
+              <div className="card1">
+                <div className="card1-body">
+                  <i className="bi bi-star"></i>
+                  <h5 className="card1-title">Mis favoritos</h5>
+                </div>
               </div>
-            </div><br />
+            </Link>
           </div>
           <div className="col-sm-6 mb-3">
-            <div className="card1">
-              <div className="card1-body">
-                <i className="bi bi-star"></i>
-                <h5 className="card1-title">Mis favoritos</h5>
-              </div>
-            </div>
-          </div>
-          <div className="col-sm-6 mb-3">
-          <Link to="/historial-facturas"> {/* Ruta a la que deseas navegar */}
+          <Link to="/historial-facturas"> 
             <div className="card1">
               <div className="card1-body">
                 <i className="bi bi-receipt-cutoff"></i>

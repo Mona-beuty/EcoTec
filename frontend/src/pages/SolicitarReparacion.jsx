@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import "../style/SolicitarReparacion.css";
 
+
 const SolicitarReparacion = () => {
   const [formData, setFormData] = useState({
     nombre: "",
@@ -25,76 +26,84 @@ const SolicitarReparacion = () => {
 
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [ticket, setTicket] = useState(null);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
-  const handleImageChange = (e) => {
+    
+const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setFormData((prev) => ({
-        ...prev,
-        imagen: file,
-      }));
+      setFormData((prev) => ({ ...prev, imagen: file }));
     }
   };
+
 
   const validateForm = () => {
     const newErrors = {};
     if (!formData.nombre.trim()) newErrors.nombre = "Tu nombre es requerido";
     if (!formData.contacto.trim()) newErrors.contacto = "El contacto es requerido";
-    if (!formData.dispositivo) newErrors.dispositivo = "Selecciona un tipo de dispositivo";
+    if (!formData.dispositivo) newErrors.dispositivo = "Selecciona un dispositivo";
     if (!formData.marca.trim()) newErrors.marca = "La marca es requerida";
     if (!formData.modelo.trim()) newErrors.modelo = "El modelo es requerido";
     if (!formData.problema.trim()) newErrors.problema = "Describe el problema";
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+   const generarTicket = () => {
+    return "TCK-" + Math.floor(100000 + Math.random() * 900000); // Ej: TCK-234567
+  };
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validateForm();
 
     if (Object.keys(newErrors).length === 0) {
-      console.log("Solicitud enviada:", formData);
+      const nuevoTicket = generarTicket();
+      setTicket(nuevoTicket);
       setSubmitted(true);
 
-      setTimeout(() => {
-        setSubmitted(false);
-        setFormData({
-          nombre: "",
-          contacto: "",
-          dispositivo: "",
-          marca: "",
-          modelo: "",
-          problema: "",
-          imagen: null,
+       try {
+       await fetch("http://localhost:5000/api/reparaciones", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, ticket: nuevoTicket }),
         });
-      }, 3000);
+
+      } catch (error) {
+        console.error("Error enviando la solicitud:", error);
+      }
+  // Reiniciar formulario
+      setFormData({
+        nombre: "",
+        contacto: "",
+        dispositivo: "",
+        marca: "",
+        modelo: "",
+        problema: "",
+        imagen: null,
+      });
     } else {
       setErrors(newErrors);
     }
-  };
+  }; 
 
-  if (submitted) {
+    if (submitted && ticket) {
     return (
       <div className="reparacion-container">
         <div className="reparacion-success-container">
           <CheckCircle className="reparacion-success-icon" />
           <h2 className="reparacion-success-title">¡Solicitud enviada!</h2>
           <p className="reparacion-success-message">
-            Hemos recibido tu solicitud de reparación. Nuestro equipo técnico se pondrá en contacto contigo pronto.
+            Tu número de ticket es <strong>{ticket}</strong>.  
+            Te estaremos informando el estado de la reparación al correo ingresado.
           </p>
         </div>
       </div>

@@ -8,7 +8,7 @@ import Login from './pages/Login.jsx';
 import FavoritosPage from './pages/FavoritosPage.jsx';
 import Carrito from './pages/Carrito.jsx';
 import Dashboard from './pages/Dashboard.jsx';
-import MiInformacion from './pages/MiInformacion';
+import MiInformacion from './pages/MiInformacion.jsx';
 import Dashboardadmi from './pages/Dashboardadmi.jsx';
 import Productos from './pages/Productos.jsx';
 import Pedido from './pages/Pedido.jsx';
@@ -21,12 +21,16 @@ import DashboardCuentas from './pages/DashboardCuentas.jsx';
 import Ventas from './pages/Ventas.jsx';
 import Calificaciones from './pages/Calificaciones.jsx';
 import DetalleProducto from './pages/DetalleProducto.jsx';
-import ResetPassword from './components/ResetPassword.jsx'; 
+import ResetPassword from './pages/ResetPassword.jsx'; 
 import Empresa from './pages/Empresa.jsx';
 import VenderDispositivo from './pages/VenderDispositivo.jsx'; // Importa la nueva página
 import SolicitarReparacion from './pages/SolicitarReparacion.jsx'; // Importa la nueva página
 import { CartProvider } from './context/CartContext';
 import CategoriaPage from './pages/CategoriaPage.jsx';
+import PagoExitoso, { PagoFallido, PagoPendiente } from './pages/PagoExitoso.jsx';
+import BlogTipsDispositivos from './pages/BlogTipsDispositivos.jsx'; 
+import DetallePedido from './pages/DetallePedido.jsx'; 
+import EstadoReparacion from './pages/EstadoReparacion.jsx'; // Importa la nueva página
 
 
 
@@ -41,22 +45,28 @@ createRoot(document.getElementById('root')).render(
               <Route path="Empresa"  element={<Empresa />} />
               <Route path="/servicios/vender-dispositivo"  element={<VenderDispositivo />} />
               <Route path="/servicios/solicitar-reparacion"  element={<SolicitarReparacion />} />
+              <Route path="/servicios/ver-estado"  element={<EstadoReparacion />} />
               <Route path="registro" element={<Registro />} />
               <Route path="login" element={<Login />} />
               <Route path="/reset-password/:token" element={<ResetPassword />} />
-              <Route path="/favoritos" element={<FavoritosPage />} />
+              <Route path="mi-informacion" element={<MiInformacion />} /> 
+              <Route path="favoritos" element={<FavoritosPage />} />
               <Route path="/carrito" element={<Carrito />} />
+              <Route path="pedido" element={<Pedido/>} />
+              <Route path="pago-exitoso" element={<PagoExitoso />} />
+              <Route path="pago-fallido" element={<PagoFallido />} />
+              <Route path="pago-pendiente" element={<PagoPendiente />} />              
+              <Route path="/blog"  element={<BlogTipsDispositivos />} />
               <Route path="dashboard" element={
                   <UserRoute><Dashboard /></UserRoute>
                 } />
                 <Route path="dashboardadmi" element={
                   <AdminRoute><Dashboardadmi/></AdminRoute>
                 } />
-              <Route path="mi-informacion" element={<MiInformacion />} /> 
               <Route path="productos" element={<Productos />} />
               <Route path="productos/:slug" element={<CategoriaPage />} />
               <Route path="/producto/:id" element={<DetalleProducto/>} /> 
-              <Route path="pedido" element={<Pedido/>} />
+              <Route path="detalle-pedido" element={<DetallePedido/>} /> 
               <Route path="metodos-pago" element={<MetodosPago />} /> 
               <Route path="factura" element={<Factura />} /> 
               <Route path="historial-facturas" element={<HistorialFacturas />} /> 

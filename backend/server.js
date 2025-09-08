@@ -6,6 +6,8 @@ import userRoutes from './routes/userRoutes.js';
 import productRoutes from './routes/productRoutes.js'; 
 import favoritosRoutes from './routes/favoritosRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
+import pedidoRoutes from "./routes/pedidoRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 import './scheduler.js';
 
 dotenv.config();
@@ -22,6 +24,10 @@ app.use('/api/users', userRoutes);
 app.use('/api/productos', productRoutes);
 app.use("/api/favoritos", favoritosRoutes);
 app.use('/api/carrito', cartRoutes);
+app.use("/api/pedidos", pedidoRoutes);
+app.use("/api/pagos", paymentRoutes);
+
+
 
 // Archivos estáticos
 app.use('/uploads', express.static('uploads'));

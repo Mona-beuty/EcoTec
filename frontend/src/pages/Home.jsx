@@ -229,7 +229,7 @@ const Home = () => {
                       className="btn" 
                       onClick={() => handleAgregarCarrito(producto.id_producto)}
                     >
-                      Agregar 🛒
+                      Agregar
                     </button>
                   </div>
                 ))

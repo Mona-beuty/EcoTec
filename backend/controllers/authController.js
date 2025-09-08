@@ -51,20 +51,38 @@ export const loginUser = async (req, res) => {
   const email = validator.normalizeEmail(req.body.email || '');
   const password = req.body.password;
 
-  if (!email || !password) return res.status(400).json({ message: 'Correo y contraseña son obligatorios' });
+  if (!email || !password) 
+    return res.status(400).json({ message: 'Correo y contraseña son obligatorios' });
 
   try {
-    const [rows] = await db.promise().execute('SELECT * FROM usuarios WHERE email = ?', [email]);
-    if (rows.length === 0) return res.status(401).json({ message: 'Correo o contraseña incorrectos' });
+    const [rows] = await db.promise().execute(
+      'SELECT * FROM usuarios WHERE email = ?', 
+      [email]
+    );
+    
+    if (rows.length === 0) 
+      return res.status(401).json({ message: 'Correo o contraseña incorrectos' });
 
     const usuario = rows[0];
     const passwordValida = await bcrypt.compare(password, usuario.password);
-    if (!passwordValida) return res.status(401).json({ message: 'Correo o contraseña incorrectos' });
+    
+    if (!passwordValida) 
+      return res.status(401).json({ message: 'Correo o contraseña incorrectos' });
 
-    const token = jwt.sign({ id: usuario.id_usuario, email: usuario.email, rol: usuario.rol }, JWT_SECRET, { expiresIn: '1h' });
+    // CAMBIO AQUÍ: Usar id_usuario en lugar de id
+    const token = jwt.sign({ 
+      id_usuario: usuario.id_usuario,  // 👈 Cambio de 'id' a 'id_usuario'
+      email: usuario.email, 
+      rol: usuario.rol 
+    }, JWT_SECRET, { expiresIn: '1h' });
 
     const { password: _, ...usuarioSinPassword } = usuario;
-    res.json({ message: 'Inicio de sesión exitoso', token, usuario: usuarioSinPassword });
+    
+    res.json({ 
+      message: 'Inicio de sesión exitoso', 
+      token, 
+      usuario: usuarioSinPassword 
+    });
   } catch (error) {
     console.error('Error en loginUser:', error);
     res.status(500).json({ message: 'Error al iniciar sesión' });

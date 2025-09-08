@@ -332,6 +332,13 @@
   background: #c82333;
 }
 
+/* Error stock */
+.carrito-error {
+  color: red;
+  margin-top: 10px;
+}
+
+
 /* ANIMACIONES */
 @keyframes fadeIn {
   from {
