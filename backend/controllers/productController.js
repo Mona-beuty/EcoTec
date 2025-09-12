@@ -2,6 +2,26 @@ import db from '../config/db.js';
 import multer from 'multer';
 import path from 'path';
 
+// Buscar productos por nombre o descripción
+export const buscarProductos = async (req, res) => {
+  const { query } = req.query;
+  if (!query || !query.trim()) {
+    return res.status(400).json({ message: 'Debes ingresar un término de búsqueda.' });
+  }
+  try {
+    // Búsqueda insensible a mayúsculas/minúsculas y espacios
+    const search = `%${query.trim().toLowerCase()}%`;
+    const [rows] = await db.promise().query(
+      `SELECT * FROM productos WHERE LOWER(TRIM(nombre)) LIKE ? OR LOWER(TRIM(descripcion)) LIKE ? ORDER BY id_producto DESC`,
+      [search, search]
+    );
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error al buscar productos.' });
+  }
+};
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'uploads/'),
@@ -64,7 +84,7 @@ export const addProduct = async (req, res) => {
   }
 
   // 🟡 Incluir también "Reacondicionados" en las categorías válidas
-  const categoriasValidas = ['Celulares', 'Tablets', 'Computadores', 'Reloj Inteligente', 'Audio', 'Promociones', 'Reacondicionados'];
+  const categoriasValidas = ['Celulares', 'Tablets', 'Computadores', 'Relojes Inteligentes', 'Audio', 'Promociones', 'Reacondicionados'];
   if (!categoriasValidas.includes(categoria)) {
     return res.status(400).json({ message: 'Categoría no válida.' });
   }

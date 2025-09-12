@@ -6,9 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
-    "tunnel:api": "ngrok start --config=ngrok.yml api",
-    "tunnel:vite": "ngrok start --config=ngrok.yml vite",
-    "tunnel:all": "ngrok start --config=ngrok.yml --all"
+    "tunnel:api": "npx ngrok start --config=ngrok.yml api",
+    "tunnel:vite": "npx ngrok start --config=ngrok.yml vite",
+    "tunnel:all": "npx ngrok start --config=ngrok.yml --all"
   },
   "keywords": [],
   "author": "",

@@ -23,6 +23,23 @@ export const createOrder = async (req, res) => {
   }
 
   try {
+    // 1. Verificar stock disponible
+    const [stockInsuficiente] = await db.promise().query(
+      `SELECT c.id_producto, p.cantidad as stock, c.cantidad as solicitado
+       FROM carrito c
+       JOIN productos p ON c.id_producto = p.id_producto
+       WHERE c.id_usuario = ? AND c.cantidad > p.cantidad`,
+      [userId]
+    );
+
+    if (stockInsuficiente.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: `Stock insuficiente para algunos productos`,
+        productos: stockInsuficiente
+      });
+    }
+
     // 1. Obtener carrito del usuario
     db.query(
       `SELECT c.id_carrito, c.cantidad,
@@ -232,5 +249,71 @@ export const rateOrder = async (req, res) => {
   }
 };
 
+// ✅ Obtener detalle de un pedido con productos
+export const getOrderDetail = (req, res) => {
+  const { id } = req.params;
+
+  db.query(
+    `SELECT d.id_pedido, d.producto_id, d.cantidad, d.precio_unitario,
+            p.nombre AS nombre_producto, p.descripcion, p.foto AS imagen,
+            pe.fecha_pedido
+     FROM detalle_pedidos d
+     JOIN productos p ON d.producto_id = p.id_producto
+     JOIN pedidos pe ON d.id_pedido = pe.id_pedido
+     WHERE d.id_pedido = ?`,
+    [id],
+    (err, results) => {
+      if (err) {
+        console.error("Error al obtener detalle del pedido:", err);
+        return res.status(500).json({ error: "Error al obtener detalle del pedido" });
+      }
+
+      if (results.length === 0) {
+        return res.status(404).json({ error: "Pedido no encontrado o sin productos" });
+      }
+
+      // Obtener calificación del pedido
+      db.query(
+        `SELECT puntuacion FROM calificaciones WHERE id_pedido = ? LIMIT 1`,
+        [id],
+        (err2, calif) => {
+          let calificacion = calif && calif.length > 0 ? calif[0].puntuacion : null;
+          // Agrega la calificación a cada producto (puedes mostrar solo una por pedido)
+          results.forEach(r => r.calificacion = calificacion);
+          res.json({ success: true, detalle: results });
+        }
+      );
+    }
+  );
+};
+
+// ✅ Obtener todos los detalles de pedidos del usuario autenticado
+export const getAllOrderDetails = (req, res) => {
+  const userId = getUserId(req);
+
+  if (!userId) {
+    return res.status(401).json({ success: false, message: "Usuario no autenticado" });
+  }
+
+  db.query(
+    `SELECT d.id_detalle, d.id_pedido, d.producto_id, d.cantidad, d.precio_unitario,
+            p.nombre AS nombre_producto, p.descripcion, p.foto AS imagen,
+            pe.fecha_pedido,
+            (SELECT puntuacion FROM calificaciones WHERE id_pedido = d.id_pedido LIMIT 1) AS calificacion
+     FROM detalle_pedidos d
+     JOIN productos p ON d.producto_id = p.id_producto
+     JOIN pedidos pe ON d.id_pedido = pe.id_pedido
+     WHERE pe.id_usuario = ?
+     ORDER BY pe.fecha_pedido DESC`,
+    [userId],
+    (err, results) => {
+      if (err) {
+        console.error("Error al obtener detalles de pedidos:", err);
+        return res.status(500).json({ error: "Error al obtener detalles de pedidos" });
+      }
+      res.json({ success: true, detalle: results });
+    }
+  );
+};
 
 

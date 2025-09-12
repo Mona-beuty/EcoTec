@@ -1,62 +1,55 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Importa Link
+import { Link } from 'react-router-dom';
 import '../style/Dashboard.css';
-import CerrarSesion from '../components/CerrarSesion'; // Importamos el botón
+import CerrarSesion from '../components/CerrarSesion';
 
-
-const Dashboard = () => {
+const UserDashboard = () => {
   return (
-    <div>
-      <h2 className='h2'>SU CUENTA</h2><br />
-      <div className="container1">
-        <div className="row">
-          <div className="col-sm-6 mb-3">
-            <Link to="/mi-informacion"> 
-              <div className="card1">
-                <div className="card1-body">
-                  <i className="bi bi-person-gear"></i>
-                  <h5 className="card1-title">Mi información</h5>
-                </div>
-              </div>
-            </Link>
-          </div>
-          <div className="col-sm-6 mb-3">
-            <Link>
-              <div className="card1">
-                <div className="card1-body">
-                  <i className="bi bi-calendar-week"></i>
-                  <h5 className="card1-title">Detalles de pedido</h5>
-                </div>
-              </div><br />
-            </Link>
-          </div>
-    
-          <div className="col-sm-6 mb-3">
-            <Link to="/favoritos"> 
-              <div className="card1">
-                <div className="card1-body">
-                  <i className="bi bi-star"></i>
-                  <h5 className="card1-title">Mis favoritos</h5>
-                </div>
-              </div>
-            </Link>
-          </div>
-          <div className="col-sm-6 mb-3">
-          <Link to="/historial-facturas"> 
-            <div className="card1">
-              <div className="card1-body">
-                <i className="bi bi-receipt-cutoff"></i>
-                <h5 className="card1-title">Historial de facturas</h5>
-              </div>
-            </div>
-            </Link>
-          </div>
+    <div className="userdash-container">
+      <div className="userdash-wrapper">
+        {/* Header */}
+        <div className="userdash-header">
+          <h2 className="userdash-title">SU CUENTA</h2>
+          <div className="userdash-divider"></div>
         </div>
-      </div><br />
-      {/* Botón de cerrar sesión */}
-      <CerrarSesion />
+
+        {/* Grid de Cards */}
+        <div className="userdash-grid">
+          <Link to="/mi-informacion" className="userdash-card">
+            <div className="userdash-card-icon">
+              <i className="bi bi-person-gear"></i>
+            </div>
+            <h5 className="userdash-card-title">Mi información</h5>
+            <p className="userdash-card-description">Gestiona tus datos personales</p>
+          </Link>
+
+          <Link to="/detalle-pedido" className="userdash-card">
+            <div className="userdash-card-icon">
+              <i className="bi bi-calendar-week"></i>
+            </div>
+            <h5 className="userdash-card-title">Detalles de pedido</h5>
+            <p className="userdash-card-description">Consulta el estado de tus compras</p>
+          </Link>
+
+          <Link to="/favoritos" className="userdash-card">
+            <div className="userdash-card-icon">
+              <i className="bi bi-star"></i>
+            </div>
+            <h5 className="userdash-card-title">Mis favoritos</h5>
+            <p className="userdash-card-description">Accede a tus productos guardados</p>
+          </Link>
+
+          <Link to="/historial-facturas" className="userdash-card">
+            <div className="userdash-card-icon">
+              <i className="bi bi-receipt-cutoff"></i>
+            </div>
+            <h5 className="userdash-card-title">Historial de facturas</h5>
+            <p className="userdash-card-description">Revisa tus facturas anteriores</p>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Dashboard;
+export default UserDashboard;

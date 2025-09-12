@@ -1,0 +1,32 @@
+.expandable-text-container {
+  position: relative;
+  width: 100%;
+}
+
+.expandable-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: left;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.expandable-text:not(.expanded) {
+  position: relative;
+}
+
+.expand-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  padding: 0;
+  margin-top: 4px;
+  font-size: 0.9em;
+  text-decoration: underline;
+}
+
+.expand-button:hover {
+  color: #0056b3;
+}

@@ -27,7 +27,7 @@ const DashboardCuentas = () => {
       setUsuarios(usuariosData);
 
       const activos = usuariosData.filter(u => u.estado === 'habilitado').length;
-      const inactivos = usuariosData.filter(u => u.estado === 'inhabilitado').length;
+      const inactivos = usuariosData.filter(u => u.estado === 'deshabilitado').length;
       const total = usuariosData.length;
 
       setEstadoUsuarios({ activos, inactivos });
@@ -55,12 +55,18 @@ const DashboardCuentas = () => {
   const toggleEstadoUsuario = async (id_usuario) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5000/api/user/${id_usuario}/toggle-status`, {}, {
+      const response = await axios.put(`http://localhost:5000/api/users/${id_usuario}/toggle-status`, {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      fetchUsuarios();
+      
+      if (response.data) {
+        console.log('Estado actualizado:', response.data.message);
+        await fetchUsuarios(); // Recargar la lista de usuarios
+      }
     } catch (error) {
       console.error('Error al cambiar estado del usuario:', error);
+      setError(error.response?.data?.message || 'Error al cambiar estado del usuario');
+      setTimeout(() => setError(null), 3000); // Limpiar el error después de 3 segundos
     }
   };
 
@@ -201,8 +207,9 @@ const DashboardCuentas = () => {
                         <button
                             className={`btn-estado ${usuario.estado === 'habilitado' ? 'btn-inactivo' : 'btn-activo'}`}
                             onClick={() => toggleEstadoUsuario(usuario.id_usuario)}
+                            title={usuario.estado === 'habilitado' ? 'Deshabilitar usuario' : 'Habilitar usuario'}
                         >
-                            {usuario.estado === 'habilitado' ? 'Inhabilitar' : 'Activar'}
+                            {usuario.estado === 'habilitado' ? 'Deshabilitar' : 'Habilitar'}
                         </button>
                      </div>
                     </td>

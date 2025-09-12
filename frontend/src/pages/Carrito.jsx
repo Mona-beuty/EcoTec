@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 import "../style/Carrito.css";
 
 const Carrito = () => {
   const { cart, updateItem, removeItem, clear, total, loading } = useCart();
+  const { user } = useAuth();
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
   const [errorMsg, setErrorMsg] = useState(""); // ⚡ mensaje de error stock
@@ -44,7 +46,11 @@ const Carrito = () => {
     <div className="carrito-container">
       <h2 className="carrito-titulo">Carrito de compras</h2>
 
-      {cart.length === 0 ? (
+      {!user ? (
+        <div className="carrito-warning">
+          <p>⚠️ Debes iniciar sesión para acceder a tu carrito de compras</p>
+        </div>
+      ) : cart.length === 0 ? (
         <p>Tu carrito está vacío</p>
       ) : (
         <div className="carrito-contenido">

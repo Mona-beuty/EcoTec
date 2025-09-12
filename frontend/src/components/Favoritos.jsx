@@ -133,7 +133,7 @@ export default function Favoritos() {
                 className="btn"
                 onClick={() => handleAgregarCarrito(p.id_producto)}
               >
-                Agregar 🛒
+                Agregar
               </button>
             </div>
           ))}

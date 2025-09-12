@@ -3,9 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../style/Login.css';
 import logoecotec2 from '../assets/image.png';
+import { useAuth } from '../context/AuthContext'; // 👈 importar contexto
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth(); // 👈 usar función login del contexto
+
   const [formValues, setFormValues] = useState({ email: '', password: '' });
   const [errors, setErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState('');
@@ -37,13 +40,15 @@ const Login = () => {
       });
 
       const { token, usuario } = response.data;
-      localStorage.setItem('token', token);
-      localStorage.setItem('usuario', JSON.stringify(usuario));
+
+      // ✅ Guardamos en el contexto y en localStorage
+      login(token, usuario);
 
       setSuccessMessage('¡Inicio de sesión exitoso!');
       setFormValues({ email: '', password: '' });
       setErrors({});
 
+      // Redirección según rol
       if (usuario.rol === 'admin') {
         navigate('/dashboardadmi');
       } else {

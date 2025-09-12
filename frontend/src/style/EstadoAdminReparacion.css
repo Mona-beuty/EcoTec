@@ -1,0 +1,49 @@
+.admin-container {
+  padding: 20px;
+  margin-top: 200px;
+}
+
+.admin-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.admin-table th,
+.admin-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.estado-badge {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.estado-pendiente {
+  background: #ffe066;
+  color: #856404;
+}
+
+.estado-proceso {
+  background: #74c0fc;
+  color: #084298;
+}
+
+.estado-finalizado {
+  background: #69db7c;
+  color: #0f5132;
+}
+
+select {
+  padding: 5px;
+  border-radius: 4px;
+}

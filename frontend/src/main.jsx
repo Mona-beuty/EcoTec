@@ -16,66 +16,66 @@ import MetodosPago from './pages/MetodosPago.jsx';
 import Factura from './pages/Factura.jsx';
 import HistorialFacturas from './pages/HistorialFacturas.jsx';
 import AdminRoute from './components/AdminRoute.jsx';
-import UserRoute from './components/Userroute.jsx';
+import UserRoute from './components/UserRoute.jsx';
 import DashboardCuentas from './pages/DashboardCuentas.jsx'; 
 import Ventas from './pages/Ventas.jsx';
 import Calificaciones from './pages/Calificaciones.jsx';
 import DetalleProducto from './pages/DetalleProducto.jsx';
 import ResetPassword from './pages/ResetPassword.jsx'; 
 import Empresa from './pages/Empresa.jsx';
-import VenderDispositivo from './pages/VenderDispositivo.jsx'; // Importa la nueva página
-import SolicitarReparacion from './pages/SolicitarReparacion.jsx'; // Importa la nueva página
+import VenderDispositivo from './pages/VenderDispositivo.jsx';
+import SolicitarReparacion from './pages/SolicitarReparacion.jsx';
 import { CartProvider } from './context/CartContext';
 import CategoriaPage from './pages/CategoriaPage.jsx';
 import PagoExitoso, { PagoFallido, PagoPendiente } from './pages/PagoExitoso.jsx';
 import BlogTipsDispositivos from './pages/BlogTipsDispositivos.jsx'; 
 import DetallePedido from './pages/DetallePedido.jsx'; 
-import EstadoReparacion from './pages/EstadoReparacion.jsx'; // Importa la nueva página
-
-
-
+import EstadoReparacion from './pages/EstadoReparacion.jsx';
+import { AuthProvider } from "./context/AuthContext.jsx";
+import EstadoAdminReparacion from './pages/EstadoAdminReparacion.jsx';
+import Buscar from './pages/Buscar.jsx';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <CartProvider>
+    <AuthProvider>
+      <CartProvider>
         <Router>
           <Routes>
             <Route path="/" element={<App />}>
               <Route index element={<Home />} />
-              <Route path="Empresa"  element={<Empresa />} />
-              <Route path="/servicios/vender-dispositivo"  element={<VenderDispositivo />} />
-              <Route path="/servicios/solicitar-reparacion"  element={<SolicitarReparacion />} />
-              <Route path="/servicios/ver-estado"  element={<EstadoReparacion />} />
+              <Route path="/buscar" element={<Buscar />} />
+              <Route path="Empresa" element={<Empresa />} />
+              <Route path="/servicios/vender-dispositivo" element={<VenderDispositivo />} />
+              <Route path="/servicios/solicitar-reparacion" element={<SolicitarReparacion />} />
+              <Route path="/servicios/ver-estado" element={<EstadoReparacion />} />
+              <Route path="estado-reparacion" element={<EstadoAdminReparacion />} />
               <Route path="registro" element={<Registro />} />
               <Route path="login" element={<Login />} />
               <Route path="/reset-password/:token" element={<ResetPassword />} />
-              <Route path="mi-informacion" element={<MiInformacion />} /> 
+              <Route path="mi-informacion" element={<MiInformacion />} />
               <Route path="favoritos" element={<FavoritosPage />} />
               <Route path="/carrito" element={<Carrito />} />
-              <Route path="pedido" element={<Pedido/>} />
+              <Route path="pedido" element={<Pedido />} />
               <Route path="pago-exitoso" element={<PagoExitoso />} />
               <Route path="pago-fallido" element={<PagoFallido />} />
               <Route path="pago-pendiente" element={<PagoPendiente />} />              
-              <Route path="/blog"  element={<BlogTipsDispositivos />} />
-              <Route path="dashboard" element={
-                  <UserRoute><Dashboard /></UserRoute>
-                } />
-                <Route path="dashboardadmi" element={
-                  <AdminRoute><Dashboardadmi/></AdminRoute>
-                } />
+              <Route path="/blog" element={<BlogTipsDispositivos />} />
+              <Route path="dashboard" element={<UserRoute><Dashboard /></UserRoute>} />
+              <Route path="dashboardadmi" element={<AdminRoute><Dashboardadmi/></AdminRoute>} />
               <Route path="productos" element={<Productos />} />
               <Route path="productos/:slug" element={<CategoriaPage />} />
-              <Route path="/producto/:id" element={<DetalleProducto/>} /> 
-              <Route path="detalle-pedido" element={<DetallePedido/>} /> 
+              <Route path="/producto/:id" element={<DetalleProducto />} /> 
+              <Route path="detalle-pedido" element={<DetallePedido />} /> 
               <Route path="metodos-pago" element={<MetodosPago />} /> 
               <Route path="factura" element={<Factura />} /> 
               <Route path="historial-facturas" element={<HistorialFacturas />} /> 
               <Route path="cuentas-registradas" element={<DashboardCuentas />} />
-              <Route path="ventas" element={<Ventas/>} />
-              <Route path="calificaciones" element={<Calificaciones/>} />
+              <Route path="ventas" element={<Ventas />} />
+              <Route path="calificaciones" element={<Calificaciones />} />
             </Route>
           </Routes>
         </Router>
-    </CartProvider>
-  </React.StrictMode>,
+      </CartProvider>
+    </AuthProvider>
+  </React.StrictMode>
 );

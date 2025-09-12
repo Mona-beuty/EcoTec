@@ -1,27 +1,166 @@
-/*.dashboard {
-  padding: 20px;
+/* ===== USER DASHBOARD REDESIGN ===== */
+
+/* Container principal */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
 }
-.card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  flex: 1;
-  min-width: 200px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+.userdash-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+  padding: 40px 20px 20px;
+  margin-top: 150px;
+}
+
+.userdash-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Header del Dashboard */
+.userdash-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.userdash-title {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 800;                    
+  margin-bottom: 24px;                 
+  line-height: 1.2;                    
+ background: linear-gradient(90deg, #343a40, #17a2b8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}  
+
+.userdash-divider {
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #002366, #00c4b4);
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+/* Grid de Cards */
+.userdash-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columnas fijas */
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+/* Cards individuales */
+.userdash-card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px 25px;
+  box-shadow: 0 10px 30px rgba(0, 35, 102, 0.1);
+  border: 1px solid rgba(0, 196, 180, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  height: 220px; /* más grandes */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* centra contenido horizontal */
+  justify-content: center; /* centra contenido vertical */
+  text-decoration: none;
+  color: inherit;
   text-align: center;
 }
 
-.chart-container {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 30px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+.userdash-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(0, 35, 102, 0.15);
+  background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
 }
 
-.dashboard-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  grid-gap: 20px;
-  margin-bottom: 30px;
+/* Elemento decorativo en las cards */
+.userdash-card::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, rgba(0, 196, 180, 0.1), rgba(0, 35, 102, 0.05));
+  border-radius: 50%;
+}
+
+/* Contenedor del icono */
+.userdash-card-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #002366, #00c4b4);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  z-index: 2;
+}
+
+.userdash-card-icon i {
+  font-size: 32px;
+  color: white;
+}
+
+/* Título de las cards */
+.userdash-card-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #002366;
+  margin-bottom: 8px;
+}
+
+/* Descripción de las cards */
+.userdash-card-description {
+  color: #6b7280;
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Botón de cerrar sesión */
+.userdash-logout-container {
+  text-align: center;
+  margin-top: 0 !important;
+}
+
+.userdash-logout-btn {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.userdash-logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .userdash-grid {
+    grid-template-columns: 1fr; /* en móviles, solo 1 columna */
+  } 
+  .userdash-card {
+    height: 200px;
+  }
 }

@@ -1,87 +1,186 @@
-.h2 {
-    
-  margin: 55px auto 50px; /* 200px arriba, 50px abajo */
-    font-size: 30px;
-    position: absolute;
-    left: 60px;
-    top: 130px;
+/* ===== DASHBOARD ADMIN REDESIGN ===== */
+
+/* Container principal */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
 }
 
-.container1 {
-    width: 900px; /* Ajusta para dar más espacio a tres tarjetas */
-    position: absolute;
-    top: 200px;
-    left: 50%;
-    transform: translateX(-50%);
-    
-  margin: 100px auto 50px; /* 200px arriba, 50px abajo */
+.admin-dashboard-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fefefe 0%, #eaf5ff 100%);
+  padding: 40px 20px 20px;
+  margin-top: 150px;
 }
 
-.card1 {
-    height: 200px;
-    border-radius: 10px;
-    border: 1px solid black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #D9D9D9;
+.admin-dashboard-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-.card1-body {
-    text-align: center;
+/* Header */
+.admin-dashboard-header {
+  text-align: center;
+  margin-bottom: 50px;
 }
 
-.card1-body i {
-    font-size: 120px;
-    color: rgba(0, 0, 0, 0.549);
-    margin-bottom: 15px;
+.admin-dashboard-title {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 800;
+  margin-bottom: 24px;
+  line-height: 1.2;
+  background: linear-gradient(90deg, #343a40, #17a2b8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
-.card1-title {
-    font-size: 18px;
-    color: #333;
-    margin: 0;
-    margin-bottom: 40px;
+.admin-dashboard-divider {
+  width: 90px;
+  height: 4px;
+  background: linear-gradient(90deg, #343a40, #17a2b8);
+  margin: 0 auto;
+  border-radius: 2px;
+}
+.admin-dashboard-grid {
+  display: flex;
+  flex-wrap: wrap;           /* permite que las tarjetas bajen a la siguiente fila */
+  gap: 30px;                 /* espacio entre tarjetas (filas y columnas) */
+  justify-content: center;   /* CENTRA cada fila */
+  align-items: start;
+  margin-bottom: 30px;
+  padding: 0 8px;            /* pequeño padding para que no pegue en los bordes */
+  box-sizing: border-box;
 }
 
-/* Espaciado uniforme entre tarjetas */
-.row {
-    margin-left: -15px;
-    margin-right: -15px;
-}
-
-.col-sm-4, .col-sm-6 {
-    padding-left: 15px;
-    padding-right: 15px;
-    margin-bottom: 15px;
+/* Quitar el posicionamiento forzado de las tarjetas */
+.admin-dashboard-card:nth-child(4),
+.admin-dashboard-card:nth-child(5) {
+  grid-column: auto;
+  grid-row: auto;
 }
 
 
-
-.h4 {
-    font-size: 20px;
-    position: fixed;
-    left: 20px;
-    bottom: 0px;
-    margin: 0;
-}
-.btn-cerrar-sesion {
-  background-color: #001a5be9;
-  color: white;
-  padding: 10px 16px;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
+/* Cards */
+.admin-dashboard-card {
+  flex: 0 0 320px;           /* ancho fijo de tarjeta: 320px (puedes ajustar) */
+  max-width: 100%;
+  background: white;
+  border-radius: 20px;
+  padding: 40px 25px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(23, 162, 184, 0.1);
+  transition: all 0.3s ease;
   cursor: pointer;
-  margin: 0 auto 40px;
-  display: block;
-  width: fit-content;
   position: relative;
-  top: 750px;
-  right: 42%;;
-
+  overflow: hidden;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+  box-sizing: border-box;
 }
 
-.btn-cerrar-sesion:hover {
-  background-color: #03184f;
+/* hover etc. (mantén tus estilos actuales) */
+.admin-dashboard-card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #ffffff 0%, #f4faff 100%);
+}
+
+/* Elemento decorativo */
+.admin-dashboard-card::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, rgba(23, 162, 184, 0.1), rgba(52, 58, 64, 0.05));
+  border-radius: 50%;
+}
+
+/* Icono */
+.admin-dashboard-card-icon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #343a40, #17a2b8);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  z-index: 2;
+}
+
+.admin-dashboard-card-icon i {
+  font-size: 32px;
+  color: white;
+}
+
+/* Título y descripción */
+.admin-dashboard-card-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #343a40;
+  margin-bottom: 8px;
+}
+
+.admin-dashboard-card-description {
+  color: #6b7280;
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Botón de cerrar sesión */
+.admin-dashboard-logout-container {
+  text-align: center;
+}
+
+.admin-dashboard-logout-btn {
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: white;
+  border: none;
+  padding: 15px 40px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-dashboard-logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .admin-dashboard-card:nth-child(4),
+  .admin-dashboard-card:nth-child(5) {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  
+  .admin-dashboard-card {
+    height: 200px;
+  }
 }

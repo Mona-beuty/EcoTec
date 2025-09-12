@@ -13,10 +13,13 @@ import {
   getMasVistosMes,
   getProductsBySlug,
 } from '../controllers/productController.js';
+import { buscarProductos } from '../controllers/productController.js';
 
 
 const router = express.Router();
 router.get('/', getAllProducts);
+// Buscar productos por nombre o descripción
+router.get('/buscar', buscarProductos);
 
 router.get('/id/:id', getProductById);
 
