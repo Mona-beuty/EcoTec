@@ -179,8 +179,21 @@
 
 .top-icons a {
   color: white;
-  transition: color 0.3s;
+  transition: color 0.3s; /* controla la separación entre íconos */
+
 }
+
+
+.top-icons .notification-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  padding: 0 6px; /* agrega un pequeño padding horizontal */
+}
+
+
+
 
 .top-icons a:hover {
   color: #ffcc00;
@@ -435,7 +448,7 @@
   }
 }
 
-/*Carrito*/
+
 .cart-icon {
   position: relative;
   display: inline-block;
@@ -453,4 +466,135 @@
   padding: 2px 6px;
   min-width: 18px;
   text-align: center;
+}
+
+/* Estilo para la sección de horario */
+.schedule {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #eaf6ff; /* blanco suave */
+  font-size: 14px;
+  font-weight: 500;
+  margin-right: 80px;
+}
+
+.schedule i {
+  color: #00b3b3; /* turquesa como el resto */
+  font-size: 16px;
+}
+
+
+/* ========== BOTONES MODERNOS PARA NAVBAR - VERSIÓN SUTIL ========== */
+
+/* BOTÓN "Hola Usuario/Administrador" */
+.account-btn {
+  background: transparent;
+  color: #002366;
+  border: 1px solid rgba(0, 35, 102, 0.2);
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.account-btn:hover {
+  background: transparent; /* sin fondo */
+  border-color: rgba(0, 179, 179, 0.4);
+  transform: translateY(-1px);
+  color: transparent; /* truco para aplicar el gradiente solo en el texto */
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(
+    135deg,
+    rgba(0, 179, 179, 0.9) 0%,
+    rgba(0, 128, 128, 1) 100%
+  );
+}
+
+/* BOTÓN "Cerrar Sesión" */
+.logout-btn {
+  background: transparent;
+  border: 1px solid rgba(108, 117, 125, 0.3);
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  z-index: 0;
+
+  /* gradiente SIEMPRE presente */
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-image: linear-gradient(
+    135deg,
+    rgba(108, 117, 125, 0.8) 0%,   /* gris neutro base */
+    rgba(108, 117, 125, 1) 100%
+  );
+}
+
+.logout-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 179, 179, 0.1) 0%,
+    rgba(0, 128, 128, 0.15) 100%
+  );
+  transition: left 0.5s ease;
+  z-index: -1;
+}
+
+.logout-btn:hover::before {
+  left: 0;
+}
+
+.logout-btn:hover {
+  border-color: rgba(0, 179, 179, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 179, 179, 0.15);
+
+  /* en hover el gradiente cambia a turquesa */
+  background-image: linear-gradient(
+    135deg,
+    rgba(0, 179, 179, 0.9) 0%,
+    rgba(0, 128, 128, 1) 100%
+  );
+}
+
+
+
+/* Mejorar el espaciado en nav-actions */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.nav-actions > * {
+  flex-shrink: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .account-btn,
+  .logout-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+    gap: 5px;
+  }
 }

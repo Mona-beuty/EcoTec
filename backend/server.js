@@ -8,6 +8,8 @@ import favoritosRoutes from './routes/favoritosRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import pedidoRoutes from "./routes/pedidoRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
+import reparacionRoutes from "./routes/reparacionRoutes.js";
+import ventasRoutes from './routes/ventasRoutes.js';
 import './scheduler.js';
 
 dotenv.config();
@@ -26,6 +28,8 @@ app.use("/api/favoritos", favoritosRoutes);
 app.use('/api/carrito', cartRoutes);
 app.use("/api/pedidos", pedidoRoutes);
 app.use("/api/pagos", paymentRoutes);
+app.use("/api/ventas", ventasRoutes);
+app.use("/api/reparaciones", reparacionRoutes);
 
 
 

@@ -261,51 +261,61 @@ const Home = () => {
           <div className="refurbished-cards">
             <div className="row">
               <div className="col-md-6">
-                <div className="card refurbished-card">
-                  <img src={img7} className="card-img-top11" alt="Imagen 7" />
-                  <div className="card-body1">
-                    <h5 className="card-title">Móviles reacondicionados</h5>
-                    <p className="card-text">Samsung  Huawei  Apple  Xiaomi.</p>
+                <Link to="/productos/reacondicionados" style={{ textDecoration: "none", color: "inherit" }}>
+                  <div className="card refurbished-card">
+                    <img src={img7} className="card-img-top11" alt="Imagen 7" />
+                    <div className="card-body1">
+                      <h5 className="card-title">Móviles reacondicionados</h5>
+                      <p className="card-text">Samsung  Huawei  Apple  Xiaomi.</p>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </div>
               <div className="col-md-6">
-                <div className="card refurbished-card">
-                  <img src={img8} className="card-img-top11" alt="Imagen 8" />
-                  <div className="card-body1">
-                    <h5 className="card-title">Tablets reacondicionadas</h5>
-                    <p className="card-text">Asus  Huawei  Lenovo  Samsung.</p>
+                <Link to="/productos/reacondicionados" style={{ textDecoration: "none", color: "inherit" }}>
+                  <div className="card refurbished-card">
+                    <img src={img8} className="card-img-top11" alt="Imagen 8" />
+                    <div className="card-body1">
+                      <h5 className="card-title">Tablets reacondicionadas</h5>
+                      <p className="card-text">Asus  Huawei  Lenovo  Samsung.</p>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </div>
             </div><br />
             <div className="row">
               <div className="col-md-4">
-                <div className="card refurbished-card">
-                  <img src={img10} className="card-img-top1" alt="Imagen 9" />
-                  <div className="card-body1">
-                    <h5 className="card-title">Portátiles reacondicionados</h5>
-                    <p className="card-text">Samsung  Lenovo  Asus  PHP</p>
+                <Link to="/productos/reacondicionados" style={{ textDecoration: "none", color: "inherit" }}>
+                  <div className="card refurbished-card">
+                    <img src={img10} className="card-img-top1" alt="Imagen 9" />
+                    <div className="card-body1">
+                      <h5 className="card-title">Portátiles reacondicionados</h5>
+                      <p className="card-text">Samsung  Lenovo  Asus  PHP</p>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </div>
               <div className="col-md-4">
-                <div className="card refurbished-card">
-                  <img src={img12} className="card-img-top1" alt="Imagen 10" />
-                  <div className="card-body1">
-                    <h5 className="card-title">Auriculares y Cascos</h5>
-                    <p className="card-text">Apple  Samsung  Audio-Technica.</p>
+                <Link to="/productos/reacondicionados" style={{ textDecoration: "none", color: "inherit" }}>
+                  <div className="card refurbished-card">
+                    <img src={img12} className="card-img-top1" alt="Imagen 10" />
+                    <div className="card-body1">
+                      <h5 className="card-title">Auriculares y Cascos</h5>
+                      <p className="card-text">Apple  Samsung  Audio-Technica.</p>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </div>
               <div className="col-md-4">
-                <div className="card refurbished-card">
-                  <img src={img11} className="card-img-top1" alt="Imagen 11" />
-                  <div className="card-body1">
-                    <h5 className="card-title">Relojes reacondicionados</h5>
-                    <p className="card-text">Apple  Samsung  Huawei.</p>
+                <Link to="/productos/reacondicionados" style={{ textDecoration: "none", color: "inherit" }}>
+                  <div className="card refurbished-card">
+                    <img src={img11} className="card-img-top1" alt="Imagen 11" />
+                    <div className="card-body1">
+                      <h5 className="card-title">Relojes reacondicionados</h5>
+                      <p className="card-text">Apple  Samsung  Huawei.</p>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </div>
             </div>
           </div>

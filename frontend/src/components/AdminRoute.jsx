@@ -1,14 +1,14 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const AdminRoute = ({ children }) => {
-  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  const { user, token } = useAuth();
 
-  if (usuario?.rol === 'admin') {
+  if (token && user?.rol === "admin") {
     return children;
   }
 
-  return <Navigate to="/" />;
+  return <Navigate to="/login" />;
 };
 
 export default AdminRoute;

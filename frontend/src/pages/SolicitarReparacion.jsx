@@ -7,11 +7,8 @@ import {
   Shield,
   Clock,
   Smartphone,
-  Headphones,
-  Battery,
 } from "lucide-react";
 import "../style/SolicitarReparacion.css";
-
 
 const SolicitarReparacion = () => {
   const [formData, setFormData] = useState({
@@ -36,14 +33,12 @@ const SolicitarReparacion = () => {
     }
   };
 
-    
-const handleImageChange = (e) => {
+  const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setFormData((prev) => ({ ...prev, imagen: file }));
     }
   };
-
 
   const validateForm = () => {
     const newErrors = {};
@@ -56,31 +51,42 @@ const handleImageChange = (e) => {
     return newErrors;
   };
 
-   const generarTicket = () => {
-    return "TCK-" + Math.floor(100000 + Math.random() * 900000); // Ej: TCK-234567
-  };
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validateForm();
 
     if (Object.keys(newErrors).length === 0) {
-      const nuevoTicket = generarTicket();
-      setTicket(nuevoTicket);
-      setSubmitted(true);
+      try {
+        const formDataToSend = new FormData();
+        formDataToSend.append("nombre", formData.nombre);
+        formDataToSend.append("contacto", formData.contacto);
+        formDataToSend.append("dispositivo", formData.dispositivo);
+        formDataToSend.append("marca", formData.marca);
+        formDataToSend.append("modelo", formData.modelo);
+        formDataToSend.append("problema", formData.problema);
+        if (formData.imagen) {
+          formDataToSend.append("imagen", formData.imagen);
+        }
 
-       try {
-       await fetch("http://localhost:5000/api/reparaciones", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, ticket: nuevoTicket }),
+        const res = await fetch("http://localhost:5000/api/reparaciones", {
+          method: "POST",
+          body: formDataToSend,
         });
 
+        const data = await res.json();
+
+        if (res.ok) {
+          // ✅ Ticket real generado en el backend
+          setTicket(data.ticket);
+          setSubmitted(true);
+        } else {
+          console.error("Error al registrar reparación:", data.error);
+        }
       } catch (error) {
         console.error("Error enviando la solicitud:", error);
       }
-  // Reiniciar formulario
+
+      // Reiniciar formulario
       setFormData({
         nombre: "",
         contacto: "",
@@ -93,9 +99,9 @@ const handleImageChange = (e) => {
     } else {
       setErrors(newErrors);
     }
-  }; 
+  };
 
-    if (submitted && ticket) {
+  if (submitted && ticket) {
     return (
       <div className="reparacion-container">
         <div className="reparacion-success-container">
@@ -103,7 +109,7 @@ const handleImageChange = (e) => {
           <h2 className="reparacion-success-title">¡Solicitud enviada!</h2>
           <p className="reparacion-success-message">
             Tu número de ticket es <strong>{ticket}</strong>.  
-            Te estaremos informando el estado de la reparación al correo ingresado.
+            Te estaremos informando el estado de la reparación al contacto ingresado.
           </p>
         </div>
       </div>
@@ -125,29 +131,6 @@ const handleImageChange = (e) => {
           <div className="reparacion-hero-badge">
             <Wrench className="reparacion-badge-icon" />
             <span>Expertos en múltiples dispositivos</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Beneficios */}
-      <div className="reparacion-benefits-section">
-        <div className="reparacion-container">
-          <div className="reparacion-benefits-grid">
-            <div className="reparacion-benefit-card">
-              <Shield className="reparacion-benefit-icon" />
-              <h3>Repuestos Garantizados</h3>
-              <p>Usamos piezas originales y certificadas.</p>
-            </div>
-            <div className="reparacion-benefit-card">
-              <Clock className="reparacion-benefit-icon" />
-              <h3>Tiempo Eficiente</h3>
-              <p>Diagnóstico y reparación en el menor tiempo posible.</p>
-            </div>
-            <div className="reparacion-benefit-card">
-              <Smartphone className="reparacion-benefit-icon" />
-              <h3>Multidispositivo</h3>
-              <p>Reparamos celulares, laptops, tablets, audífonos y más.</p>
-            </div>
           </div>
         </div>
       </div>
@@ -200,7 +183,7 @@ const handleImageChange = (e) => {
                 )}
               </div>
 
-              {/* Tipo de dispositivo */}
+              {/* Dispositivo */}
               <div className="reparacion-form-group">
                 <label className="reparacion-label">Tipo de dispositivo *</label>
                 <select

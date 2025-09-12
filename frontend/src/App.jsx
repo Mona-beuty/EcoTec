@@ -1,6 +1,7 @@
 // App.jsx - CON SUBMENÚS DESPLEGABLES
+import { useAuth } from "./context/AuthContext"; 
 import React, { useState } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';
 import { useCart } from './context/CartContext'; 
@@ -9,14 +10,39 @@ import logo from './assets/ecotec.png';
 const App = () => {
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const { cart } = useCart(); // 👈 obtener carrito desde el contexto
+  const { cart } = useCart();
+  const { user, logout } = useAuth(); 
   const totalItems = cart.reduce((acc, item) => acc + item.cantidad, 0);
 
   const location = useLocation();
+  const navigate = useNavigate(); // 👈 necesario para redirigir
 
   const handleSubmenuClick = (submenuName) => {
     setOpenSubmenu(openSubmenu === submenuName ? null : submenuName);
+  };
+
+  // 👇 función para enviar al dashboard correcto
+  const handleGoDashboard = () => {
+    if (user?.rol === "admin") {
+      navigate("/dashboardadmi");
+    } else {
+      navigate("/dashboard");
+    }
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login'); // Redirige a login después de cerrar sesión
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/buscar?query=${encodeURIComponent(searchTerm)}`);
+      setSearchTerm("");
+    }
   };
 
   return (
@@ -33,15 +59,30 @@ const App = () => {
             </div>
           </div>
           
-          <div className="top-icons">
-            <Link to="/favoritos"><i className="bi bi-star"></i></Link>
-            <Link to="/carrito" className="cart-icon">
-              <i className="bi bi-cart"></i>
-              {totalItems > 0 && location.pathname !== "/carrito" && (
-                <span className="cart-badge">{totalItems}</span>
-              )}
-            </Link>
-          </div>
+             <div className="top-icons">
+  {/* 🕒 Horario */}
+  <div className="schedule">
+    <i className="bi bi-clock"></i>
+    <span>Lunes - Sábado (08AM - 10PM)</span>
+  </div>
+
+  {/* 🔔 Notificaciones */}
+  <Link to="/notificaciones" className="notification-icon">
+    <i className="bi bi-bell"></i>
+  </Link>
+
+  {/* ⭐ Favoritos */}
+  <Link to="/favoritos"><i className="bi bi-star"></i></Link>
+
+  {/* 🛒 Carrito */}
+  <Link to="/carrito" className="cart-icon">
+    <i className="bi bi-cart"></i>
+    {totalItems > 0 && location.pathname !== "/carrito" && (
+      <span className="cart-badge">{totalItems}</span>
+    )}
+  </Link>
+</div>
+
         </div>
 
         <div className="main-navbar">
@@ -59,7 +100,7 @@ const App = () => {
               onMouseEnter={() => setIsServicesDropdownOpen(true)}
               onMouseLeave={() => {
                 setIsServicesDropdownOpen(false);
-                setOpenSubmenu(null); // Cerrar submenús al salir
+                setOpenSubmenu(null); 
               }}
             >
               <span className="dropdown-trigger">
@@ -73,7 +114,7 @@ const App = () => {
                   Vende tu dispositivo
                 </Link>
                 
-                {/* Reparación y soporte técnico - CON SUBMENÚ */}
+                {/* Reparación y soporte técnico */}
                 <div className="dropdown-item-with-submenu">
                   <div 
                     className="dropdown-item submenu-trigger"
@@ -83,7 +124,6 @@ const App = () => {
                     <i className={`bi bi-chevron-right submenu-arrow ${openSubmenu === 'reparacion' ? 'rotated' : ''}`}></i>
                   </div>
                   
-                  {/* Submenú de Reparación */}
                   <div className={`submenu ${openSubmenu === 'reparacion' ? 'show' : ''}`}>
                     <Link to="/servicios/solicitar-reparacion" className="submenu-item">
                       Solicitar reparación
@@ -95,7 +135,7 @@ const App = () => {
                   </div>
                 </div>
                 
-                {/* Productos - CON SUBMENÚ */}
+                {/* Productos */}
                 <div className="dropdown-item-with-submenu">
                   <div 
                     className="dropdown-item submenu-trigger"
@@ -105,7 +145,6 @@ const App = () => {
                     <i className={`bi bi-chevron-right submenu-arrow ${openSubmenu === 'productos' ? 'rotated' : ''}`}></i>
                   </div>
                   
-                  {/* Submenú de Productos */}
                   <div className={`submenu ${openSubmenu === 'productos' ? 'show' : ''}`}>
                     <Link to="/productos/celulares" className="submenu-item">
                       <i className="bi bi-headphones"></i>
@@ -144,11 +183,37 @@ const App = () => {
           </ul>
           
           <div className="nav-actions">
-            <i className="bi bi-search search-icon"></i>
-            <span className="account"><Link to="/login">Mi cuenta</Link></span>
-            <Link to="/registro">
-              <button className="register-btn">Registro</button>
-            </Link>
+            <form className="search-form" onSubmit={handleSearch}>
+              <input 
+                type="text" 
+                className="search-input" 
+                placeholder="Buscar..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <button type="submit" className="search-button">
+                <i className="bi bi-search"></i>
+              </button>
+            </form>
+            
+            {user ? (
+              <>
+                <button onClick={handleGoDashboard} className="account-btn">
+                  {user.rol === "admin" ? "Hola Administrador" : `Hola, ${user.nombre}`}
+                </button>
+                
+                <button onClick={handleLogout} className="logout-btn">Cerrar sesión</button>
+              </>
+            ) : (
+              <>
+                <span className="account">
+                  <Link to="/login">Mi cuenta</Link>
+                </span>
+                <Link to="/registro">
+                  <button className="register-btn">Registro</button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>

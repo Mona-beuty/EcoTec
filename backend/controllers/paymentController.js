@@ -15,7 +15,7 @@ const client = new MercadoPagoConfig({
   }
 });
 
-const FRONTEND_BASE_URL = "https://d3e926e63349.ngrok-free.app";
+const FRONTEND_BASE_URL = "https://42658236264c.ngrok-free.app";
 
 export const crearPago = async (req, res) => {
   try {
@@ -110,74 +110,73 @@ export const crearPago = async (req, res) => {
 export const webhook = async (req, res) => {
   try {
     const { type, data } = req.body;
-
-    if (type !== "payment") {
-      return res.sendStatus(200);
-    }
-
-    if (!process.env.MP_ACCESS_TOKEN) {
-      return res.sendStatus(200);
-    }
-
-    try {
+    
+    if (type === "payment" && data.id) {
       const payment = new Payment(client);
       const paymentInfo = await payment.get({ id: data.id });
 
-      const pedidoId = paymentInfo.external_reference;
-      const paymentStatus = paymentInfo.status;
-
-      let estadoPedido;
-      switch (paymentStatus) {
-        case "approved":
-          estadoPedido = "pagado";
-          break;
-        case "pending":
-        case "in_process":
-          estadoPedido = "pendiente";
-          break;
-        case "rejected":
-        case "cancelled":
-          estadoPedido = "cancelado";
-          break;
-        default:
-          estadoPedido = "pendiente";
-      }
-
-      if (pedidoId) {
-        const updateQuery = `
-          UPDATE pedidos 
-          SET estado = ?, 
-              payment_id = ?, 
-              payment_status = ?,
-              payment_method = ?,
-              fecha_pago = NOW()
-          WHERE id_pedido = ?
-        `;
+      if (paymentInfo.status === "approved") {
+        const pedidoId = paymentInfo.external_reference;
         
-        db.query(
-          updateQuery,
-          [
-            estadoPedido, 
-            paymentInfo.id, 
-            paymentStatus,
-            paymentInfo.payment_method_id,
-            pedidoId
-          ],
-          (err, result) => {
-            if (err) {
-              console.error("Error al actualizar pedido:", err);
-            }
-          }
-        );
+        // 1. Actualizar estado del pedido
+        await actualizarEstadoPedido(pedidoId, paymentInfo);
+        
+        // 2. Reducir inventario
+        await reducirInventario(pedidoId);
       }
-    } catch (paymentError) {
-      console.error("Error al obtener info del pago:", paymentError.message);
     }
-
     res.sendStatus(200);
   } catch (error) {
-    console.error("Error general en webhook:", error);
-    res.sendStatus(200);
+    console.error("Error en webhook:", error);
+    res.sendStatus(200); // Siempre responder 200 a Mercado Pago
+  }
+};
+
+// Función para reducir el inventario
+const reducirInventario = async (pedidoId) => {
+  try {
+    // 1. Obtener los productos y cantidades del pedido
+    const [detalles] = await db.promise().query(
+      `SELECT producto_id, cantidad 
+       FROM detalle_pedidos 
+       WHERE id_pedido = ?`,
+      [pedidoId]
+    );
+
+    // 2. Actualizar el inventario para cada producto
+    for (const detalle of detalles) {
+      await db.promise().query(
+        `UPDATE productos 
+         SET cantidad = cantidad - ?,
+             updated_at = CURRENT_TIMESTAMP 
+         WHERE id_producto = ? AND cantidad >= ?`,
+        [detalle.cantidad, detalle.producto_id, detalle.cantidad]
+      );
+    }
+
+    console.log(`✅ Inventario actualizado para pedido ${pedidoId}`);
+  } catch (error) {
+    console.error("Error actualizando inventario:", error);
+    throw error;
+  }
+};
+
+// Función para actualizar estado del pedido
+const actualizarEstadoPedido = async (pedidoId, paymentInfo) => {
+  try {
+    await db.promise().query(
+      `UPDATE pedidos 
+       SET estado = 'pagado',
+           payment_id = ?,
+           payment_status = 'approved',
+           payment_method = ?,
+           fecha_pago = CURRENT_TIMESTAMP
+       WHERE id_pedido = ?`,
+      [paymentInfo.id, paymentInfo.payment_method_id, pedidoId]
+    );
+  } catch (error) {
+    console.error("Error actualizando pedido:", error);
+    throw error;
   }
 };
 

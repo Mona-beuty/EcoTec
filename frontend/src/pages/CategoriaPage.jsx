@@ -179,7 +179,7 @@ export default function CategoriaPage() {
             </Link>
 
             <button className="btn" onClick={() => handleAgregarCarrito(p.id_producto)}>
-              Agregar 🛒
+              Agregar
             </button>
           </div>
         ))}

@@ -2,72 +2,72 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../style/Dashboardadmi.css';
-import CerrarSesion from '../components/CerrarSesion'; // Importamos el botón
+import CerrarSesion from '../components/CerrarSesion';
 
 const Dashboardadmi = () => {
   return (
-    <div>
-      <h2 className='h2'>ADMINISTRADOR</h2><br />
-      <div className="container1">
-        <div className="row">
-          {/* Primera fila: tres tarjetas */}
-          <div className="col-sm-4 mb-3">
-            <Link to="/productos">
-              <div className="card1">
-                <div className="card1-body">
-                  <i className="bi bi-laptop"></i>
-                  <h5 className="card1-title">Productos</h5>
-                </div>
-              </div>
-            </Link>
-          </div>
-          <div className="col-sm-4 mb-3">
-            <Link to="/cuentas-registradas">
-                <div className="card1">
-                  <div className="card1-body">
-                    <i className="bi bi-people-fill"></i>
-                    <h5 className="card1-title">Cuentas Registradas</h5>
-                  </div>
-                </div>
-            </Link>
-          </div>
-          <div className="col-sm-4 mb-3">
-            <Link to="/ventas">
-            <div className="card1">
-              <div className="card1-body">
-                <i className="bi bi-database-fill-up"></i>
-                <h5 className="card1-title">Ventas del mes</h5>
-              </div>
-            </div>
-            </Link>
-          </div>
+    <div className="admin-dashboard-container">
+      <div className="admin-dashboard-wrapper">
+        {/* Header */}
+        <div className="admin-dashboard-header">
+          <h2 className="admin-dashboard-title">ADMINISTRADOR</h2>
+          <div className="admin-dashboard-divider"></div>
         </div>
 
-        {/* Segunda fila: dos tarjetas centradas */}
-        <div className="row justify-content-center">
-          <div className="col-sm-4 mb-3">
-            <div className="card1">
-              <div className="card1-body">
-                <i className="bi bi-house-gear-fill"></i>
-                <h5 className="card1-title">Estado de Reparaciones</h5>
-              </div>
+        {/* Grid de Cards */}
+        <div className="admin-dashboard-grid">
+          <Link to="/productos" className="admin-dashboard-card">
+            <div className="admin-dashboard-card-icon">
+              <i className="bi bi-laptop"></i>
             </div>
-          </div>
-          <div className="col-sm-4 mb-3">
-            <Link to="/calificaciones">
-            <div className="card1">
-              <div className="card1-body">
-                <i className="bi bi-star-fill"></i>
-                <h5 className="card1-title">Calificaciones</h5>
-              </div>
-            </div>
-            </Link>
-          </div>
-        </div>
-      </div><br />
+            <h5 className="admin-dashboard-card-title">Productos</h5>
+            <p className="admin-dashboard-card-description">
+              Gestiona tus productos
+            </p>
+          </Link>
 
-      {/* Botón de cerrar sesión */}
-      <CerrarSesion />
+          <Link to="/cuentas-registradas" className="admin-dashboard-card">
+            <div className="admin-dashboard-card-icon">
+              <i className="bi bi-people-fill"></i>
+            </div>
+            <h5 className="admin-dashboard-card-title">Cuentas Registradas</h5>
+            <p className="admin-dashboard-card-description">
+              Administra usuarios
+            </p>
+          </Link>
+
+          <Link to="/ventas" className="admin-dashboard-card">
+            <div className="admin-dashboard-card-icon">
+              <i className="bi bi-database-fill-up"></i>
+            </div>
+            <h5 className="admin-dashboard-card-title">Ventas del Mes</h5>
+            <p className="admin-dashboard-card-description">
+              Consulta reportes de ventas
+            </p>
+          </Link>
+
+          <Link to="/estado-reparacion" className="admin-dashboard-card">
+            <div className="admin-dashboard-card-icon">
+              <i className="bi bi-house-gear-fill"></i>
+            </div>
+            <h5 className="admin-dashboard-card-title">Estado de Reparaciones</h5>
+            <p className="admin-dashboard-card-description">
+              Monitorea reparaciones
+            </p>
+          </Link>
+
+          <Link to="/calificaciones" className="admin-dashboard-card">
+            <div className="admin-dashboard-card-icon">
+              <i className="bi bi-star-fill"></i>
+            </div>
+            <h5 className="admin-dashboard-card-title">Calificaciones</h5>
+            <p className="admin-dashboard-card-description">
+              Revisa opiniones
+            </p>
+          </Link>
+        </div>
+
+      </div>
     </div>
   );
 };

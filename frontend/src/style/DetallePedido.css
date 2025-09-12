@@ -1,0 +1,149 @@
+.historial-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 40px 20px;
+  font-family: Arial, sans-serif;
+}
+
+.historial-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  margin-top: 20px;
+  max-width: 1000px;
+  width: 100%;
+}
+
+.historial-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.facturas-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  background: #fff;
+}
+
+.facturas-table th {
+  background: #f8f9fa;
+  color: #495057;
+  font-weight: 600;
+  padding: 15px;
+  font-size: 14px;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.facturas-table td {
+  padding: 15px;
+  font-size: 14px;
+  color: #495057;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+  max-width: 300px; /* Ajusta este valor según necesites */
+}
+
+/* Ajustes para la celda de descripción */
+.facturas-table td .expandable-text-container {
+  min-width: 200px; /* Ajusta este valor según necesites */
+}
+
+/* Estilos para la celda unificada del número de pedido */
+.pedido-id {
+  font-weight: 600;
+  color: #2c3e50;
+  text-align: center;
+  background-color: #f8f9fa;
+  border-right: 1px solid #dee2e6;
+  vertical-align: middle;
+}
+
+/* Estilos para agrupar productos del mismo pedido */
+.pedido-group {
+  border-top: 2px solid #e9ecef;
+}
+
+.pedido-group:first-of-type {
+  border-top: none;
+}
+
+/* ID del pedido en negrita */
+.pedido-id {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* Estrellas más bonitas */
+.stars {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.star {
+  font-size: 18px;
+  color: #ddd;
+  transition: color 0.2s ease;
+}
+
+.star.filled {
+  color: #ffd700;
+}
+
+/* Efectos hover */
+.table-row:hover {
+  background-color: #f8f9fa;
+  transition: background-color 0.2s ease;
+}
+
+/* Estilos para las celdas unificadas */
+.pedido-id,
+.calificacion-cell {
+  text-align: center;
+  background-color: #f8f9fa;
+  border-right: 1px solid #dee2e6;
+  vertical-align: middle;
+}
+
+.calificacion-cell {
+  border-left: 1px solid #dee2e6;
+}
+
+/* Centra las estrellas en la celda */
+.calificacion-cell .stars {
+  justify-content: center;
+  display: flex;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .historial-card {
+    padding: 15px;
+    margin-top: 10px;
+  }
+
+  .historial-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .facturas-table th,
+  .facturas-table td {
+    padding: 10px;
+    font-size: 13px;
+  }
+}
