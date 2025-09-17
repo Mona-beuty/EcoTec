@@ -53,6 +53,22 @@ const SolicitarReparacion = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!isAuthenticated) {
+      // Reinicia el formulario solo para usuario NO autenticado
+      setFormData({
+        nombre: "",
+        contacto: "",
+        dispositivo: "",
+        marca: "",
+        modelo: "",
+        problema: "",
+        imagen: null,
+      });
+      setErrors({});
+      return;
+    }
+
     const newErrors = validateForm();
 
     if (Object.keys(newErrors).length === 0) {
@@ -68,38 +84,43 @@ const SolicitarReparacion = () => {
           formDataToSend.append("imagen", formData.imagen);
         }
 
+        const token = localStorage.getItem("token");
+
         const res = await fetch("http://localhost:5000/api/reparaciones", {
           method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
           body: formDataToSend,
         });
 
         const data = await res.json();
 
         if (res.ok) {
-          // ✅ Ticket real generado en el backend
           setTicket(data.ticket);
           setSubmitted(true);
+          // Solo borra el formulario si el envío fue exitoso
+          setFormData({
+            nombre: "",
+            contacto: "",
+            dispositivo: "",
+            marca: "",
+            modelo: "",
+            problema: "",
+            imagen: null,
+          });
         } else {
           console.error("Error al registrar reparación:", data.error);
         }
       } catch (error) {
         console.error("Error enviando la solicitud:", error);
       }
-
-      // Reiniciar formulario
-      setFormData({
-        nombre: "",
-        contacto: "",
-        dispositivo: "",
-        marca: "",
-        modelo: "",
-        problema: "",
-        imagen: null,
-      });
     } else {
       setErrors(newErrors);
     }
   };
+
+  const isAuthenticated = !!localStorage.getItem("token"); // O usa tu contexto de auth
 
   if (submitted && ticket) {
     return (
@@ -279,10 +300,21 @@ const SolicitarReparacion = () => {
               </div>
             </div>
 
-            <button type="button" onClick={handleSubmit} className="reparacion-submit-button">
+            <button
+              type="button"
+              onClick={handleSubmit}
+              className="reparacion-submit-button"
+            >
               <Wrench className="reparacion-button-icon" />
               Enviar solicitud
             </button>
+            {!isAuthenticated && (
+              <div className="reparacion-auth-warning">
+                <AlertCircle className="reparacion-error-icon" />
+                <span>Debes iniciar sesión para enviar la solicitud.</span>
+                <a href="/login" className="reparacion-login-link">Iniciar sesión</a>
+              </div>
+            )}
           </div>
         </div>
       </div>

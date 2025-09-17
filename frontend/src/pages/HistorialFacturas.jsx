@@ -148,7 +148,21 @@ const HistorialFacturas = () => {
                         minimumFractionDigits: 0
                       }).format(pedido.total)}
                     </td>
-                    <td>{pedido.payment_method}</td>
+                    <td>
+                      {pedido.card_brand ? (
+                        <span 
+                          className="payment-method" 
+                          data-brand={pedido.card_brand.toLowerCase()}
+                        >
+                          {pedido.card_brand.charAt(0).toUpperCase() + pedido.card_brand.slice(1)}
+                          {pedido.card_last4 && ` ****${pedido.card_last4}`}
+                        </span>
+                      ) : (
+                        <span className="payment-method-fallback">
+                          {pedido.payment_method || 'No especificado'}
+                        </span>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -192,7 +206,7 @@ const HistorialFacturas = () => {
               >
                 {isDownloading ? (
                   <>
-                    <span className="loading-spinner"></span>
+                    <span className="spinner-download"></span>
                     Descargando...
                   </>
                 ) : (

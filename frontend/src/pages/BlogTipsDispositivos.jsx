@@ -1,92 +1,86 @@
-import React, { useState, useEffect } from 'react';
-import '../style/BlogTipsDispositivos.css';
-import { 
+import React, { useState } from "react";
+import {
   Laptop, Shield, Droplets, Thermometer, Zap, Trash2, WifiOff, Monitor,
   Play, Pause, Battery, BatteryLow, Clock, CheckCircle, AlertTriangle,
   Smartphone, Tablet, Camera, Headphones, Calculator, TrendingUp,
-  Volume2, Settings, Eye, Lightbulb, Wrench, BookOpen
-} from 'lucide-react';
+  Volume2, Settings, Eye, Lightbulb, Wrench, BookOpen, ExternalLink
+} from "lucide-react";
+import pantalla from "../assets/pantalla.png";
+import teclado from "../assets/teclado.png";
+import ventilacion from "../assets/ventilacion.png";
+import "../style/BlogTipsDispositivos.css";
+
 
 const BlogTipsDispositivos = () => {
-  const [activeVideo, setActiveVideo] = useState(null);
-  const [batteryCalculator, setBatteryCalculator] = useState({
-    deviceType: 'laptop',
-    usage: 'normal',
-    age: 1,
-    result: null
-  });
-  const [activeGuide, setActiveGuide] = useState(null);
+  // 👉 Estados que faltaban
   const [checkedSteps, setCheckedSteps] = useState({});
+  const [activeGuide, setActiveGuide] = useState(null);
+  const [batteryCalculator, setBatteryCalculator] = useState({
+    deviceType: "laptop",
+    usage: "normal",
+    age: 1,
+    result: null,
+  });
 
-  const videos = [
-    {
-      id: 'limpieza-pantalla',
-      title: 'Cómo limpiar correctamente la pantalla',
-      duration: '3:24',
-      thumbnail: <Monitor className="video-thumbnail-icon" />,
-      category: 'Limpieza'
-    },
-    {
-      id: 'limpieza-teclado',
-      title: 'Mantenimiento del teclado',
-      duration: '4:12',
-      thumbnail: <Laptop className="video-thumbnail-icon" />,
-      category: 'Mantenimiento'
-    },
-    {
-      id: 'bateria-tips',
-      title: 'Optimizar vida útil de la batería',
-      duration: '5:45',
-      thumbnail: <Battery className="video-thumbnail-icon" />,
-      category: 'Batería'
-    },
-    {
-      id: 'ventilacion',
-      title: 'Limpiar sistema de ventilación',
-      duration: '6:33',
-      thumbnail: <Thermometer className="video-thumbnail-icon" />,
-      category: 'Refrigeración'
-    }
-  ];
+  // 👇 FUNCIÓN QUE FALTABA
+  const openVideo = (url) => {
+    window.open(url, "_blank");
+  };
+
+
+const videos = [ 
+  {
+    id: 'limpieza-pantalla',
+    title: 'Cómo limpiar correctamente la pantalla',
+    duration: '3:24',
+    thumbnail: pantalla, // 👈 ahora es imagen
+    category: 'Limpieza',
+    youtubeUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+  },
+  {
+    id: 'limpieza-teclado',
+    title: 'Mantenimiento del teclado',
+    duration: '4:12',
+    thumbnail: teclado, // 👈 imagen
+    category: 'Mantenimiento',
+    youtubeUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+  },
+  {
+    id: 'ventilacion',
+    title: 'Limpiar sistema de ventilación',
+    duration: '6:33',
+    thumbnail: ventilacion, // 👈 imagen
+    category: 'Refrigeración',
+    youtubeUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+  }
+];
+
 
   const tips = [
     {
-      icon: <Droplets className="tip-icon" />,
-      title: "Evita los líquidos",
-      description: "Mantén bebidas alejadas de tu computadora o teclado. Si ocurre un derrame, desconecta inmediatamente y seca con cuidado.",
-      category: "Básico",
-      details: "El 37% de los daños en laptops son causados por líquidos. Usa siempre vasos con tapa cerca de tu equipo."
-    },
-    {
-      icon: <Thermometer className="tip-icon" />,
+      icon: <Thermometer className="blog-tip-icon" />,
       title: "Controla la temperatura",
       description: "Usa una toallita suave para limpiar el polvo de las rejillas de ventilación. El sobrecalentamiento reduce la vida útil del equipo.",
       category: "Mantenimiento",
       details: "La temperatura ideal de operación es entre 10°C y 35°C. Limpia las rejillas cada 3 meses."
+
     },
     {
-      icon: <Monitor className="tip-icon" />,
+      icon: <Monitor className="blog-tip-icon" />,
       title: "Limpia la pantalla correctamente",
       description: "Usa un paño de microfibra ligeramente húmedo. Nunca rocíes líquidos directamente sobre la pantalla.",
       category: "Limpieza",
       details: "Apaga el equipo antes de limpiar. Usa movimientos circulares suaves desde el centro hacia afuera."
     },
     {
-      icon: <Battery className="tip-icon" />,
+      icon: <Battery className="blog-tip-icon" />,
       title: "Optimiza la batería",
       description: "Evita descargas completas frecuentes. Mantén la carga entre 20% y 80% para maximizar la vida útil.",
       category: "Batería",
       details: "Las baterías modernas tienen entre 500-1000 ciclos de carga. Un ciclo = 0% a 100%."
     },
     {
-      icon: <Zap className="tip-icon" />,
-      title: "Usa un regulador de voltaje",
-      description: "Protege tu equipo de picos de corriente y variaciones eléctricas que pueden dañar los componentes internos.",
-      category: "Protección",
-      details: "Los picos de voltaje causan el 15% de las fallas en computadoras. Invierte en un UPS de calidad."
-    },
-    {
-      icon: <Trash2 className="tip-icon" />,
+      icon: <Trash2 className="blog-tip-icon" />,
       title: "Limpia archivos regularmente",
       description: "Elimina archivos temporales y programas innecesarios. Mantén al menos 15% de espacio libre en el disco duro.",
       category: "Software",
@@ -98,7 +92,7 @@ const BlogTipsDispositivos = () => {
     {
       id: 'pantalla',
       title: 'Limpieza de Pantalla',
-      icon: <Monitor className="guide-icon" />,
+      icon: <Monitor className="blog-guide-icon" />,
       steps: [
         'Apaga completamente el dispositivo',
         'Desconecta todos los cables',
@@ -113,7 +107,7 @@ const BlogTipsDispositivos = () => {
     {
       id: 'teclado',
       title: 'Limpieza de Teclado',
-      icon: <Laptop className="guide-icon" />,
+      icon: <Laptop className="blog-guide-icon" />,
       steps: [
         'Apaga y desconecta el dispositivo',
         'Voltea el teclado para eliminar residuos',
@@ -128,7 +122,7 @@ const BlogTipsDispositivos = () => {
     {
       id: 'ventilacion',
       title: 'Sistema de Ventilación',
-      icon: <Thermometer className="guide-icon" />,
+      icon: <Thermometer className="blog-guide-icon" />,
       steps: [
         'Apaga y desconecta completamente',
         'Localiza las rejillas de ventilación',
@@ -195,81 +189,80 @@ const BlogTipsDispositivos = () => {
     <div className="blog-tips-container">
       {/* Hero Section */}
       <section className="tips-hero">
-        <div className="hero-content">
-          <h1 className="hero-title">
-            Mantén tus <span className="gradient-text">dispositivos</span> como nuevos
+        <div className="blog-hero-content">
+          <h1 className="blog-hero-title">
+            Mantén tus <span className="blog-gradient-text">dispositivos</span> como nuevos
           </h1>
-          <p className="hero-subtitle">
+          <p className="blog-hero-subtitle">
             Guías paso a paso, videos tutoriales y calculadoras interactivas para el cuidado profesional de tus equipos
           </p>
-          <div className="hero-stats">
-            <div className="stat-item">
-              <span className="stat-number">15+</span>
-              <span className="stat-label">Videos Tutoriales</span>
+          <div className="blog-hero-stats">
+            <div className="blog-stat-item">
+              <span className="blog-stat-number">15+</span>
+              <span className="blog-stat-label">Videos Tutoriales</span>
             </div>
-            <div className="stat-item">
-              <span className="stat-number">50+</span>
-              <span className="stat-label">Tips Profesionales</span>
+            <div className="blog-stat-item">
+              <span className="blog-stat-number">50+</span>
+              <span className="blog-stat-label">Tips Profesionales</span>
             </div>
-            <div className="stat-item">
-              <span className="stat-number">3</span>
-              <span className="stat-label">Guías Interactivas</span>
+            <div className="blog-stat-item">
+              <span className="blog-stat-number">3</span>
+              <span className="blog-stat-label">Guías Interactivas</span>
             </div>
           </div>
         </div>
         <div className="hero-visual">
           <div className="floating-devices">
-            <Laptop className="device-icon laptop" />
-            <Smartphone className="device-icon smartphone" />
-            <Tablet className="device-icon tablet" />
+            <Laptop className="blog-device-icon laptop" />
+            <Smartphone className="blog-device-icon smartphone" />
+            <Tablet className="blog-device-icon tablet" />
           </div>
         </div>
       </section>
 
-      <div className="content-container">
-        {/* Videos Section */}
-        <section className="videos-section">
-          <div className="section-header">
-            <Play className="section-icon" />
-            <h2 className="section-title">Videos Tutoriales</h2>
-            <p className="section-subtitle">Aprende visualmente con nuestras guías paso a paso</p>
-          </div>
+      <div className="blog-content-container">
+<section className="blog-videos-section">
+  <div className="blog-section-header">
+    <Play className="blog-section-icon" />
+    <h2 className="blog-section-title">Videos Tutoriales</h2>
+    <p className="blog-section-subtitle">Aprende visualmente con nuestras guías paso a paso</p>
+  </div>
 
-          <div className="videos-grid">
-            {videos.map((video) => (
-              <div key={video.id} className="video-card">
-                <div className="video-thumbnail">
-                  {video.thumbnail}
-                  <div className="video-overlay">
-                    <button 
-                      className="play-btn"
-                      onClick={() => setActiveVideo(video.id)}
-                    >
-                      <Play className="play-icon" />
-                    </button>
-                    <span className="video-duration">{video.duration}</span>
-                  </div>
-                </div>
-                <div className="video-info">
-                  <span className="video-category">{video.category}</span>
-                  <h3 className="video-title">{video.title}</h3>
-                </div>
-              </div>
-            ))}
+  <div className="blog-videos-grid">
+    {videos.map((video) => (
+      <div key={video.id} className="blog-video-card" onClick={() => openVideo(video.youtubeUrl)}>
+        <div
+          className="blog-video-thumbnail"
+          style={{ backgroundImage: `url(${video.thumbnail})` }}
+        >
+          <div className="blog-video-overlay">
+            <button className="blog-play-btn">
+              <Play className="blog-play-icon" />
+            </button>
           </div>
-        </section>
+        </div>
+
+        <div className="p-4">
+          <h3>{video.title}</h3>
+          <p>Haz clic para ver en YouTube</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
 
         {/* Battery Calculator */}
-        <section className="calculator-section">
-          <div className="section-header">
-            <Calculator className="section-icon" />
-            <h2 className="section-title">Calculadora de Batería</h2>
-            <p className="section-subtitle">Estima la duración de tu batería según el uso</p>
+        <section className="blog-calculator-section">
+          <div className="blog-section-header">
+            <Calculator className="blog-section-icon" />
+            <h2 className="blog-section-title">Calculadora de Batería</h2>
+            <p className="blog-section-subtitle">Estima la duración de tu batería según el uso</p>
           </div>
 
-          <div className="calculator-container">
-            <div className="calculator-inputs">
-              <div className="input-group">
+          <div className="blog-calculator-container">
+            <div className="blog-calculator-inputs">
+              <div className="blog-input-group">
                 <label>Tipo de dispositivo</label>
                 <select 
                   value={batteryCalculator.deviceType}
@@ -281,7 +274,7 @@ const BlogTipsDispositivos = () => {
                 </select>
               </div>
 
-              <div className="input-group">
+              <div className="blog-input-group">
                 <label>Tipo de uso</label>
                 <select 
                   value={batteryCalculator.usage}
@@ -294,7 +287,7 @@ const BlogTipsDispositivos = () => {
                 </select>
               </div>
 
-              <div className="input-group">
+              <div className="blog-input-group">
                 <label>Antigüedad (años)</label>
                 <input 
                   type="range" 
@@ -303,30 +296,30 @@ const BlogTipsDispositivos = () => {
                   value={batteryCalculator.age}
                   onChange={(e) => setBatteryCalculator(prev => ({...prev, age: parseInt(e.target.value)}))}
                 />
-                <span className="range-value">{batteryCalculator.age} años</span>
+                <span className="blog-range-value">{batteryCalculator.age} años</span>
               </div>
 
-              <button className="calculate-btn" onClick={calculateBattery}>
+              <button className="blog-calculate-btn" onClick={calculateBattery}>
                 <Calculator className="btn-icon" />
                 Calcular Duración
               </button>
             </div>
 
             {batteryCalculator.result && (
-              <div className="calculator-result">
-                <Battery className="result-icon" />
+              <div className="blog-calculator-result">
+                <Battery className="blog-result-icon" />
                 <div className="result-text">
                   <h3>Duración estimada</h3>
-                  <span className="result-hours">{batteryCalculator.result} horas</span>
+                  <span className="blog-result-hours">{batteryCalculator.result} horas</span>
                 </div>
               </div>
             )}
 
-            <div className="battery-optimization">
+            <div className="blog-battery-optimization">
               <h4>Tips para optimizar la batería:</h4>
-              <div className="battery-tips-grid">
+              <div className="blog-battery-tips-grid">
                 {batteryTips.map((tip, index) => (
-                  <div key={index} className="battery-tip">
+                  <div key={index} className="blog-battery-tip">
                     {tip.icon}
                     <span>{tip.tip}</span>
                   </div>
@@ -337,18 +330,18 @@ const BlogTipsDispositivos = () => {
         </section>
 
         {/* Interactive Cleaning Guides */}
-        <section className="guides-section">
-          <div className="section-header">
-            <BookOpen className="section-icon" />
-            <h2 className="section-title">Guías Interactivas de Limpieza</h2>
-            <p className="section-subtitle">Sigue estos pasos para un mantenimiento perfecto</p>
+        <section className="blog-guides-section">
+          <div className="blog-section-header">
+            <BookOpen className="blog-section-icon" />
+            <h2 className="blog-section-title">Guías Interactivas de Limpieza</h2>
+            <p className="blog-section-subtitle">Sigue estos pasos para un mantenimiento perfecto</p>
           </div>
 
-          <div className="guides-tabs">
+          <div className="blog-guides-tabs">
             {cleaningGuides.map((guide) => (
               <button 
                 key={guide.id}
-                className={`guide-tab ${activeGuide === guide.id ? 'active' : ''}`}
+                className={`blog-guide-tab ${activeGuide === guide.id ? 'active' : ''}`}
                 onClick={() => setActiveGuide(guide.id)}
               >
                 {guide.icon}
@@ -358,31 +351,31 @@ const BlogTipsDispositivos = () => {
           </div>
 
           {activeGuide && (
-            <div className="guide-content">
+            <div className="blog-guide-content">
               {cleaningGuides.find(g => g.id === activeGuide) && (
                 <div className="guide-steps">
-                  <div className="guide-warning">
+                  <div className="blog-guide-warning">
                     <AlertTriangle className="warning-icon" />
                     <span>{cleaningGuides.find(g => g.id === activeGuide).warning}</span>
                   </div>
                   
-                  <div className="steps-list">
+                  <div className="blog-steps-list">
                     {cleaningGuides.find(g => g.id === activeGuide).steps.map((step, index) => (
                       <div 
                         key={index} 
-                        className={`step-item ${checkedSteps[`${activeGuide}-${index}`] ? 'completed' : ''}`}
+                        className={`blog-step-item ${checkedSteps[`${activeGuide}-${index}`] ? 'completed' : ''}`}
                         onClick={() => toggleStep(activeGuide, index)}
                       >
-                        <div className="step-checkbox">
+                        <div className="blog-step-checkbox">
                           {checkedSteps[`${activeGuide}-${index}`] ? (
-                            <CheckCircle className="check-icon" />
+                            <CheckCircle className="blog-check-icon" />
                           ) : (
-                            <div className="unchecked-circle" />
+                            <div className="blog-unchecked-circle" />
                           )}
                         </div>
                         <div className="step-content">
-                          <span className="step-number">Paso {index + 1}</span>
-                          <p className="step-description">{step}</p>
+                          <span className="blog-step-number">Paso {index + 1}</span>
+                          <p className="blog-step-description">{step}</p>
                         </div>
                       </div>
                     ))}
@@ -395,22 +388,22 @@ const BlogTipsDispositivos = () => {
 
         {/* Tips Grid */}
         <section className="tips-section">
-          <div className="section-header">
-            <Shield className="section-icon" />
-            <h2 className="section-title">Tips Esenciales de Mantenimiento</h2>
-            <p className="section-subtitle">Conocimiento profesional para el cuidado diario</p>
+          <div className="blog-section-header">
+            <Shield className="blog-section-icon" />
+            <h2 className="blog-section-title">Tips Esenciales de Mantenimiento</h2>
+            <p className="blog-section-subtitle">Conocimiento profesional para el cuidado diario</p>
           </div>
 
-          <div className="tips-grid">
+          <div className="blog-tips-grid">
             {tips.map((tip, index) => (
-              <div key={index} className="tip-card">
-                <div className="tip-header">
+              <div key={index} className="blog-tip-card">
+                <div className="blog-tip-header">
                   {tip.icon}
-                  <span className="tip-category">{tip.category}</span>
+                  <span className="blog-tip-category">{tip.category}</span>
                 </div>
-                <h3 className="tip-title">{tip.title}</h3>
-                <p className="tip-description">{tip.description}</p>
-                <div className="tip-details">
+                <h3 className="blog-tip-title">{tip.title}</h3>
+                <p className="blog-tip-description">{tip.description}</p>
+                <div className="blog-tip-details">
                   <span className="details-label">💡 Dato profesional:</span>
                   <p className="details-text">{tip.details}</p>
                 </div>
@@ -420,25 +413,25 @@ const BlogTipsDispositivos = () => {
         </section>
 
         {/* Statistics Section */}
-        <section className="stats-section">
-          <div className="stats-container">
-            <div className="stat-card">
-              <TrendingUp className="stat-icon" />
+        <section className="blog-stats-section">
+          <div className="blog-stats-container">
+            <div className="blog-stat-card">
+              <TrendingUp className="blog-stat-icon" />
               <h3>85%</h3>
               <p>De las fallas se previenen con mantenimiento regular</p>
             </div>
-            <div className="stat-card">
-              <Clock className="stat-icon" />
+            <div className="blog-stat-card">
+              <Clock className="blog-stat-icon" />
               <h3>3x</h3>
               <p>Más vida útil con cuidado adecuado</p>
             </div>
-            <div className="stat-card">
-              <Shield className="stat-icon" />
+            <div className="blog-stat-card">
+              <Shield className="blog-stat-icon" />
               <h3>60%</h3>
               <p>Menos reparaciones necesarias</p>
             </div>
-            <div className="stat-card">
-              <Battery className="stat-icon" />
+            <div className="blog-stat-card">
+              <Battery className="blog-stat-icon" />
               <h3>40%</h3>
               <p>Mejor rendimiento de batería</p>
             </div>
@@ -446,31 +439,31 @@ const BlogTipsDispositivos = () => {
         </section>
 
         {/* CTA Section */}
-        <section className="cta-section">
-          <div className="cta-content">
-            <h3 className="cta-title">¿Tu dispositivo necesita atención profesional?</h3>
-            <p className="cta-description">
-              Nuestros técnicos certificados ofrecen diagnóstico gratuito y reparaciones especializadas
-            </p>
-            <div className="cta-buttons">
-              <button className="cta-button primary">
-                <Shield className="button-icon" />
-                Diagnóstico Gratuito
-              </button>
-              <button className="cta-button secondary">
-                <Wrench className="button-icon" />
-                Ver Servicios
-              </button>
-            </div>
-            <div className="cta-guarantee">
-              <CheckCircle className="guarantee-icon" />
-              <span>Garantía de 6 meses en todas las reparaciones</span>
-            </div>
-          </div>
-        </section>
+<section className="blog-cta-section">
+  <div className="cta-content">
+    <h3 className="blog-cta-title">¿Tu dispositivo necesita atención profesional?</h3>
+    <p className="blog-cta-description">
+      Nuestros técnicos certificados ofrecen diagnóstico gratuito y reparaciones especializadas
+    </p>
+    <div className="blog-cta-buttons">
+      <a href="/servicios/solicitar-reparacion" className="blog-cta-button primary">
+        <Wrench className="button-icon" />
+        Solicitar Reparación
+      </a>
+    </div>
+    <div className="blog-cta-guarantee">
+      <CheckCircle className="blog-guarantee-icon" />
+      <span>Garantía de 6 meses en todas las reparaciones</span>
+    </div>
+  </div>
+</section>
+
+
+
       </div>
     </div>
   );
 };
 
 export default BlogTipsDispositivos;
+

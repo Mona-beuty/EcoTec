@@ -1,21 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { obtenerFavoritos, eliminarFavorito } from "../api/favoritosApi";
-  import { useCart } from "../context/CartContext"; 
-import "../style/Categoria.css";
+import { useCart } from "../context/CartContext"; 
+import "../style/Estrellas.css";
 
 export default function Favoritos() {
   const [favoritos, setFavoritos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(null);
-  const [mensajes, setMensajes] = useState([]); // ✅ array para múltiples mensajes
+  const [mensajes, setMensajes] = useState([]);
   const navigate = useNavigate();
 
-   const { addItem } = useCart();
+  const { addItem } = useCart();
 
-  // 📌 Función para mostrar mensajes flotantes en cola
+  // 📌 Mostrar mensajes flotantes
   const mostrarMensaje = (msg) => {
-    const id = Date.now(); // id único para cada mensaje
+    const id = Date.now();
     setMensajes((prev) => [...prev, { id, text: msg }]);
 
     setTimeout(() => {
@@ -23,7 +23,7 @@ export default function Favoritos() {
     }, 1500);
   };
 
-  // 📌 Cargar favoritos al montar el componente
+  // 📌 Cargar favoritos
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -38,7 +38,7 @@ export default function Favoritos() {
       .finally(() => setLoading(false));
   }, []);
 
-  // 📌 Quitar un producto de favoritos
+  // 📌 Quitar de favoritos
   const quitarFavorito = async (idProducto) => {
     try {
       await eliminarFavorito(idProducto);
@@ -60,7 +60,7 @@ export default function Favoritos() {
     }
 
     try {
-      await addItem(productoId, 1); 
+      await addItem(productoId, 1);
       mostrarMensaje("✅ Producto agregado al carrito");
     } catch (err) {
       console.error("❌ Error al agregar al carrito:", err);
@@ -69,35 +69,35 @@ export default function Favoritos() {
   };
 
   return (
-    <div className="cat-wrap">
-      <h2>Mis Favoritos</h2>
+    <div className="fav-container">
+      <h2 className="fav-title">Mis Favoritos</h2>
 
-      {/* 👇 Mensajes flotantes siempre visibles */}
-      <div className="mensajes-container">
+      {/* 👇 Mensajes flotantes */}
+      <div className="fav-messages-container">
         {mensajes.map((m) => (
-          <div key={m.id} className="mensaje-flotante">
+          <div key={m.id} className="fav-message">
             {m.text}
           </div>
         ))}
       </div>
 
-      {/* 📌 Estados de carga y error */}
-      {loading && <p>Cargando favoritos...</p>}
-      {err && <p className="error">{err}</p>}
+      {/* 📌 Estados */}
+      {loading && <p className="fav-state">Cargando favoritos...</p>}
+      {err && <p className="fav-error">{err}</p>}
 
       {/* 📌 Lista vacía */}
       {!loading && !err && favoritos.length === 0 && (
-        <p>No tienes productos en favoritos todavía.</p>
+        <p className="fav-state">No tienes productos en favoritos todavía.</p>
       )}
 
-      {/* 📌 Renderizar productos */}
+      {/* 📌 Productos */}
       {favoritos.length > 0 && (
-        <div className="products-grid">
+        <div className="fav-grid">
           {favoritos.map((p) => (
-            <div key={p.id_producto} className="featured-card">
-              <div className="card-header">
+            <div key={p.id_producto} className="fav-card">
+              <div className="fav-card-header">
                 <span
-                  className="favorite-icon"
+                  className="fav-icon"
                   onClick={() => quitarFavorito(p.id_producto)}
                   style={{ cursor: "pointer" }}
                 >
@@ -118,19 +118,19 @@ export default function Favoritos() {
                       : "/placeholder.png"
                   }
                   alt={p.nombre}
-                  className="card-img-top"
+                  className="fav-img"
                 />
 
-                <div className="card-body">
-                  <p className="card-text">{p.nombre}</p>
-                  <h5 className="price">
+                <div className="fav-body">
+                  <p className="fav-text">{p.nombre}</p>
+                  <h5 className="fav-price">
                     ${Number(p.precio).toLocaleString("es-CO")}
                   </h5>
                 </div>
               </Link>
 
               <button
-                className="btn"
+                className="fav-btn"
                 onClick={() => handleAgregarCarrito(p.id_producto)}
               >
                 Agregar

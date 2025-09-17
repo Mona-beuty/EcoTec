@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { createOrder } from "../api/pedidoService";
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import "../style/Pedido.css";
 
 const Pedido = () => {
   const { cart, total } = useCart();
+  const navigate = useNavigate();
   const [direccion, setDireccion] = useState({
     direccion: "",
     direccion_complementaria: "",
@@ -30,7 +31,7 @@ const Pedido = () => {
     setDireccion({ ...direccion, [e.target.name]: e.target.value });
   };
 
-  // Función para mostrar notificaciones
+  // Función para mostrar notificaciones---
   const showNotification = (type, message) => {
     setNotification({
       show: true,
@@ -49,42 +50,41 @@ const Pedido = () => {
     setNotification(prev => ({ ...prev, show: false }));
   };
 
-const handleConfirm = async () => {
-  if (!direccion.direccion || !direccion.codigo_postal || !direccion.ciudad || !direccion.pais) {
-    showNotification('error', 'Por favor completa todos los campos obligatorios');
-    return;
-  }
 
-  try {
-    // 1. Crear pedido en backend
-    const orderData = {
-      ...direccion,
-      usar_para_facturas: useForBilling
-    };
-    const res = await createOrder(orderData);
+  const handleConfirm = async () => {
+    if (!direccion.direccion || !direccion.codigo_postal || !direccion.ciudad || !direccion.pais) {
+      showNotification('error', 'Por favor completa todos los campos obligatorios');
+      return;
+    }
 
-    setPedidoId(res.pedidoId);
+    try {
+      // 1. Crear el pedido en tu backend (esto no cambia)
+      const orderResponse = await createOrder({
+        ...direccion,
+        usar_para_facturas: useForBilling
+      });
 
-    // 2. Enviar pedido e items al backend para iniciar pago
-    const pagoRes = await axios.post("http://localhost:5000/api/pagos/crear", {
-      pedidoId: res.pedidoId,
-      items: res.items || cart  // Usar items del response o cart
-    }, {
-      headers: { 
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        'Content-Type': 'application/json'
+      if (!orderResponse.success) {
+        throw new Error(orderResponse.message || "Error al crear el pedido");
       }
-    });
 
-    // 3. Redirigir a pasarela (MercadoPago, Stripe, etc.)
-    window.location.href = pagoRes.data.init_point;
+      const { pedidoId, total } = orderResponse;
 
-  } catch (error) {
-    console.error("Error al iniciar pago:", error);
-    const errorMessage = error.response?.data?.message || "Error desconocido al iniciar el pago";
-    showNotification('error', `Error al iniciar pago: ${errorMessage}`);
-  }
-};
+      // 2. Redirigir a la nueva página de pago de Stripe
+      // Pasamos el ID del pedido y el total para usarlos en la siguiente página
+      navigate('/pagar', {
+        state: {
+          pedidoId,
+          total
+        }
+      });
+
+    } catch (error) {
+      console.error("Error al procesar el pedido:", error);
+      const serverMsg = error.response?.data?.message;
+      showNotification('error', serverMsg || error.message || "Error al procesar el pedido");
+    }
+  };
 
 
 
@@ -266,7 +266,7 @@ const handleConfirm = async () => {
               className="checkout-confirm-button"
               disabled={!cart || cart.length === 0}
             >
-              Confirmar
+              Continuar al pago
             </button>
 
             <p className="checkout-disclaimer">

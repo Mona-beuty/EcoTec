@@ -180,7 +180,7 @@ export const getOrders = async (req, res) => {
   try {
     db.query(
       `SELECT p.id_pedido, p.total, p.total_envio, p.estado, p.fecha_pedido,
-              p.payment_method, p.payment_status, p.fecha_pago,
+              p.payment_method, p.payment_status, p.fecha_pago, p.card_brand,
               u.nombre AS nombre_usuario,
               SUM(d.cantidad) AS cantidad_total
        FROM pedidos p
@@ -314,6 +314,112 @@ export const getAllOrderDetails = (req, res) => {
       res.json({ success: true, detalle: results });
     }
   );
+};
+
+// Obtener estadísticas de calificaciones por periodo
+export const getRatingsStats = async (req, res) => {
+  const { periodo } = req.query;
+  let query = '';
+
+  try {
+    switch (periodo) {
+      case 'dia':
+        query = `
+          SELECT 
+            HOUR(fecha_calificacion) as periodo,
+            AVG(puntuacion) as avgRating,
+            COUNT(*) as count
+          FROM calificaciones
+          WHERE DATE(fecha_calificacion) = CURDATE()
+          GROUP BY HOUR(fecha_calificacion)
+          ORDER BY periodo`;
+        break;
+
+      case 'semana':
+        query = `
+          SELECT 
+            DATE(fecha_calificacion) as periodo,
+            AVG(puntuacion) as avgRating,
+            COUNT(*) as count
+          FROM calificaciones
+          WHERE fecha_calificacion >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+          GROUP BY DATE(fecha_calificacion)
+          ORDER BY periodo`;
+        break;
+
+      case 'mes':
+        query = `
+          SELECT 
+            DATE(fecha_calificacion) as periodo,
+            AVG(puntuacion) as avgRating,
+            COUNT(*) as count
+          FROM calificaciones
+          WHERE fecha_calificacion >= DATE_SUB(CURDATE(), INTERVAL 29 DAY)
+          GROUP BY DATE(fecha_calificacion)
+          ORDER BY periodo`;
+        break;
+
+      case 'año':
+        query = `
+          SELECT 
+            DATE_FORMAT(fecha_calificacion, '%Y-%m') as periodo,
+            AVG(puntuacion) as avgRating,
+            COUNT(*) as count
+          FROM calificaciones
+          WHERE fecha_calificacion >= DATE_SUB(CURDATE(), INTERVAL 11 MONTH)
+          GROUP BY DATE_FORMAT(fecha_calificacion, '%Y-%m')
+          ORDER BY periodo`;
+        break;
+
+      default:
+        return res.status(400).json({ message: 'Periodo no válido' });
+    }
+
+    const [results] = await db.promise().query(query);
+    res.json(results);
+  } catch (error) {
+    console.error('Error al obtener estadísticas:', error);
+    res.status(500).json({ message: 'Error al obtener estadísticas' });
+  }
+};
+
+// Obtener resumen de calificaciones
+export const getRatingsSummary = async (req, res) => {
+  const { periodo } = req.query;
+  let dateCondition = '';
+
+  try {
+    switch (periodo) {
+      case 'dia':
+        dateCondition = 'DATE(fecha_calificacion) = CURDATE()';
+        break;
+      case 'semana':
+        dateCondition = 'fecha_calificacion >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)';
+        break;
+      case 'mes':
+        dateCondition = 'fecha_calificacion >= DATE_SUB(CURDATE(), INTERVAL 29 DAY)';
+        break;
+      case 'año':
+        dateCondition = 'fecha_calificacion >= DATE_SUB(CURDATE(), INTERVAL 11 MONTH)';
+        break;
+      default:
+        return res.status(400).json({ message: 'Periodo no válido' });
+    }
+
+    const query = `
+      SELECT 
+        COUNT(*) as totalRatings,
+        AVG(puntuacion) as avgRating,
+        COUNT(CASE WHEN puntuacion >= 4 THEN 1 END) * 100.0 / COUNT(*) as excellenceRate
+      FROM calificaciones
+      WHERE ${dateCondition}`;
+
+    const [results] = await db.promise().query(query);
+    res.json(results[0]);
+  } catch (error) {
+    console.error('Error al obtener resumen:', error);
+    res.status(500).json({ message: 'Error al obtener resumen' });
+  }
 };
 
 

@@ -8,13 +8,17 @@ import favoritosRoutes from './routes/favoritosRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import pedidoRoutes from "./routes/pedidoRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
+import { stripeWebhook } from './controllers/paymentController.js';
 import reparacionRoutes from "./routes/reparacionRoutes.js";
 import ventasRoutes from './routes/ventasRoutes.js';
-import './scheduler.js';
+import notificacionesRoutes from './routes/notificacionesRoutes.js';import './scheduler.js';
 
 dotenv.config();
 
 const app = express();
+
+// Stripe Webhook debe ir antes de express.json()
+app.post('/api/payments/webhook', express.raw({ type: 'application/json' }), stripeWebhook);
 
 // Middlewares
 app.use(cors()); 
@@ -27,9 +31,10 @@ app.use('/api/productos', productRoutes);
 app.use("/api/favoritos", favoritosRoutes);
 app.use('/api/carrito', cartRoutes);
 app.use("/api/pedidos", pedidoRoutes);
-app.use("/api/pagos", paymentRoutes);
-app.use("/api/ventas", ventasRoutes);
+app.use('/api/payments', paymentRoutes);
 app.use("/api/reparaciones", reparacionRoutes);
+app.use('/api/ventas', ventasRoutes);
+app.use('/api/notificaciones', notificacionesRoutes);
 
 
 

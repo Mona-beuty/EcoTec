@@ -45,6 +45,7 @@ export const CartProvider = ({ children }) => {
       setCart(data.items);
     } catch (error) {
       console.error("Error al agregar al carrito:", error);
+      throw error;
     }
   };
 

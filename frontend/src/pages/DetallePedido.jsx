@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Estrellas from "../components/Estrellas";
 import ExpandableText from '../components/TextoExpandible';
-import "../style/HistorialFacturas.css";
+import "../style/DetallePedido.css";
 
 const API_BASE_URL = "http://localhost:5000";
 

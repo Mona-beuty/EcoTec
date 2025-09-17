@@ -1,7 +1,7 @@
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "../style/Categoria.css";
+import "../App.css";
 import { useCart } from "../context/CartContext";
 import { obtenerFavoritos, agregarFavorito, eliminarFavorito } from "../api/favoritosApi";
 

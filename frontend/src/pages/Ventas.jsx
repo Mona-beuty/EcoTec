@@ -259,7 +259,7 @@ const Ventas = () => {
   return (
     <div className="ventas-container">
       <h2 className="dashboard-title">
-        <TrendingUp className="icon-title" />
+        
         Dashboard de Ventas
       </h2>
 

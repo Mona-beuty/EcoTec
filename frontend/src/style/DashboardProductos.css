@@ -1,12 +1,11 @@
-/*.dashboard {
+.dashboard { 
   padding: 24px;
   background: #f9fafb;
   border-radius: 16px;
   margin: 24px 0;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
-
-
 
 .dashboard-cards {
   display: flex;
@@ -56,7 +55,7 @@
   color: #6b7280;
 }
 
-/* Colores diferenciados 
+
 
 .card-total-count { color: #15275b; }
 .card-low-stock { color: #dc2626; }

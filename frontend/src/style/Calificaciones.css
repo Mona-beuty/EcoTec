@@ -1,0 +1,106 @@
+.dashboard-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #f9fafb, #e5e7eb);
+  padding: 2rem;
+  
+}
+
+.dashboard-container {
+  max-width: 1300px;
+  margin: 150px auto 50px;
+  padding-top: 50px;
+
+}
+
+.dashboard-title {
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  color: #003366;
+  font-weight: 700;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  
+}
+
+.card-stats {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.card-stats:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+}
+
+.period-filter {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.period-button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.period-button.active {
+  background: #003366;
+  color: white;
+  transform: scale(1.05);
+}
+
+.period-button:not(.active) {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.chart-card {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.chart-title {
+  color: #003366;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #003366;
+}
+
+.stat-label {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.stat-period {
+  color: #9ca3af;
+  font-size: 0.75rem;
+}

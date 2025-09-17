@@ -1,16 +1,10 @@
-import express from "express";
-import { crearPago, webhook, verificarPago } from "../controllers/paymentController.js";
-import { authenticateToken } from "../middleware/auth.js"; // Asegúrate de tener este middleware
+import express from 'express';
+import { createPaymentIntent } from '../controllers/paymentController.js';
+import { authenticateToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Crear preferencia de pago (requiere autenticación)
-router.post("/crear", authenticateToken, crearPago);
-
-// Webhook de Mercado Pago (NO requiere autenticación)
-router.post("/webhook", webhook);
-
-// Verificar estado de pago
-router.get("/verificar", verificarPago);
+// POST /api/payments/create-payment-intent
+router.post('/create-payment-intent', authenticateToken, createPaymentIntent);
 
 export default router;

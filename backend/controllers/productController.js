@@ -1,6 +1,7 @@
 import db from '../config/db.js'; 
 import multer from 'multer';
 import path from 'path';
+import { registrarNotificacion } from '../helpers/notificaciones.js'; // 👈 Importar helper de notificaciones
 
 // Buscar productos por nombre o descripción
 export const buscarProductos = async (req, res) => {
@@ -93,10 +94,38 @@ export const addProduct = async (req, res) => {
   const tipo_producto = (categoria === 'Reacondicionados') ? 'reacondicionado' : 'nuevo';
 
   try {
-    await db.promise().execute(
+    const [result] = await db.promise().execute(
       'INSERT INTO productos (nombre, descripcion, cantidad, precio, codigo, categoria, foto, tipo_producto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
       [nombre, descripcion, cantidad, precio, codigo, categoria, foto, tipo_producto]
     );
+
+    // 🚀 NUEVA FUNCIONALIDAD: Si es una promoción, notificar a todos los usuarios
+    if (categoria === 'Promociones') {
+      try {
+        // Obtener todos los usuarios registrados (excluyendo admins)
+        const [usuarios] = await db.promise().query(
+          'SELECT id_usuario FROM usuarios WHERE rol = "usuario"'
+        );
+
+        // Crear notificaciones para todos los usuarios
+        const notificacionPromises = usuarios.map(usuario => {
+          return registrarNotificacion({
+            id_usuario: usuario.id_usuario,
+            tipo: 'promocion',
+            mensaje: `¡Nueva promoción disponible! 🎉 ${nombre} - ${descripcion}. ¡No te la pierdas!`,
+            fecha: new Date()
+          });
+        });
+
+        // Ejecutar todas las notificaciones
+        await Promise.all(notificacionPromises);
+        console.log(`✅ Notificaciones de promoción enviadas a ${usuarios.length} usuarios`);
+      } catch (notificationError) {
+        console.error('❌ Error al enviar notificaciones de promoción:', notificationError);
+        // No devolver error porque el producto se creó correctamente
+      }
+    }
+
     res.status(201).json({ message: 'Producto agregado correctamente' });
   } catch (error) {
     if (error.code === 'ER_DUP_ENTRY') {

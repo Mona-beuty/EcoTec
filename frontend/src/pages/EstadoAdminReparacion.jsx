@@ -5,7 +5,7 @@ const EstadoAdminReparacion = () => {
   const [reparaciones, setReparaciones] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ Obtener reparaciones al cargar
+  // Obtener reparaciones al cargar
   useEffect(() => {
     fetchReparaciones();
   }, []);
@@ -16,13 +16,13 @@ const EstadoAdminReparacion = () => {
       const data = await res.json();
       setReparaciones(data);
     } catch (error) {
-      console.error("❌ Error cargando reparaciones:", error);
+      console.error("Error cargando reparaciones:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ Cambiar estado de reparación
+  // Cambiar estado de reparación
   const actualizarEstado = async (id, nuevoEstado) => {
     try {
       await fetch(`http://localhost:5000/api/reparaciones/${id}/estado`, {
@@ -34,20 +34,28 @@ const EstadoAdminReparacion = () => {
       // Refrescar lista después de actualizar
       fetchReparaciones();
     } catch (error) {
-      console.error("❌ Error actualizando estado:", error);
+      console.error("Error actualizando estado:", error);
     }
   };
 
   if (loading) {
-    return <p>Cargando reparaciones...</p>;
+    return (
+      <div className="admin-container">
+        <div className="loading-container">
+          <p>Cargando reparaciones...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="admin-container">
-      <h1 className="admin-title">📋 Estado de Reparaciones</h1>
+      <h1 className="admin-title">Estado de Reparaciones</h1>
 
       {reparaciones.length === 0 ? (
-        <p>No hay solicitudes de reparación.</p>
+        <div className="no-data">
+          <p>No hay solicitudes de reparación.</p>
+        </div>
       ) : (
         <table className="admin-table">
           <thead>
@@ -63,7 +71,7 @@ const EstadoAdminReparacion = () => {
           <tbody>
             {reparaciones.map((rep) => (
               <tr key={rep.id_reparacion}>
-                <td>{rep.ticket}</td>
+                <td>#{rep.ticket}</td>
                 <td>{rep.nombre}</td>
                 <td>{rep.dispositivo}</td>
                 <td>{rep.problema}</td>
@@ -77,7 +85,7 @@ const EstadoAdminReparacion = () => {
                         : "estado-finalizado"
                     }`}
                   >
-                    {rep.estado}
+                    {rep.estado.replace('_', ' ')}
                   </span>
                 </td>
                 <td>

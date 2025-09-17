@@ -1,5 +1,5 @@
 import express from "express";
-import { createOrder, getOrders, rateOrder, getOrderStatus, getOrderDetail, getAllOrderDetails } from "../controllers/pedidoController.js";
+import { createOrder, getOrders, rateOrder, getOrderStatus, getOrderDetail, getAllOrderDetails, getRatingsStats, getRatingsSummary } from "../controllers/pedidoController.js";
 import { generateInvoicePDF } from "../facturasPdf/facturaUsuario.js";
 import { authenticateToken } from "../middleware/auth.js";
 
@@ -13,5 +13,7 @@ router.get("/detalle", authenticateToken, getAllOrderDetails);
 router.get("/", authenticateToken, getOrders);
 router.post("/calificar", authenticateToken, rateOrder);
 router.get('/factura/:id_pedido', authenticateToken, generateInvoicePDF);
+router.get('/ratings-stats', getRatingsStats);
+router.get('/ratings-summary', getRatingsSummary);
 
 export default router;

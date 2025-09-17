@@ -1,285 +1,140 @@
-import { MercadoPagoConfig, Preference, Payment } from "mercadopago";
-import db from "../config/db.js";
+import Stripe from 'stripe';
 import dotenv from 'dotenv';
+import db from '../config/db.js';
+import { registrarNotificacion } from '../helpers/notificaciones.js';
 
 dotenv.config();
 
-if (!process.env.MP_ACCESS_TOKEN) {
-  console.error("ERROR: MP_ACCESS_TOKEN no está definido en .env");
-}
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-const client = new MercadoPagoConfig({
-  accessToken: process.env.MP_ACCESS_TOKEN || '',
-  options: {
-    timeout: 5000,
-  }
-});
+// Crear una intención de pago
+export const createPaymentIntent = async (req, res) => {
+  const { pedidoId } = req.body;
 
-const FRONTEND_BASE_URL = "https://42658236264c.ngrok-free.app";
-
-export const crearPago = async (req, res) => {
   try {
-    const { pedidoId, items } = req.body;
-
-    if (!process.env.MP_ACCESS_TOKEN) {
-      return res.status(500).json({ 
-        success: false, 
-        error: "Token de Mercado Pago no configurado. Contacta al administrador." 
-      });
-    }
-
-    if (!pedidoId || !items || items.length === 0) {
-      return res.status(400).json({ 
-        success: false, 
-        error: "Faltan datos del pedido o items" 
-      });
-    }
-
-    const mpItems = items.map((item) => ({
-      id: String(item.id_producto || item.id_carrito),
-      title: item.nombre || "Producto",
-      description: item.descripcion || "",
-      quantity: parseInt(item.cantidad) || 1,
-      unit_price: parseFloat(item.precio) || 0,
-      currency_id: "COP",
-    }));
-
-    mpItems.push({
-      id: "envio",
-      title: "Costo de envío",
-      description: "Envío estándar",
-      quantity: 1,
-      unit_price: 15000,
-      currency_id: "COP",
-    });
-
-    const preference = new Preference(client);
-
-    const preferenceData = {
-      items: mpItems,
-      external_reference: String(pedidoId),
-      back_urls: {
-        success: `${FRONTEND_BASE_URL}/pago-exitoso`,
-        failure: `${FRONTEND_BASE_URL}/pago-fallido`,
-        pending: `${FRONTEND_BASE_URL}/pago-pendiente`
-      },
-      auto_return: "approved",
-      statement_descriptor: "TIENDA ONLINE",
-      payment_methods: {
-        excluded_payment_types: [],
-        excluded_payment_methods: [],
-        installments: 12
-      },
-      binary_mode: false,
-    };
-
-    const response = await preference.create({
-      body: preferenceData
-    });
-
-    if (pedidoId) {
-      db.query(
-        "UPDATE pedidos SET payment_id = ?, payment_status = 'pending' WHERE id_pedido = ?",
-        [response.id, pedidoId],
-        (err) => {
-          if (err) {
-            console.error("Error al actualizar pedido con payment_id:", err);
-          }
-        }
-      );
-    }
-
-    res.json({
-      success: true,
-      init_point: response.init_point || response.sandbox_init_point,
-      sandbox_init_point: response.sandbox_init_point,
-      preference_id: response.id
-    });
-
-  } catch (error) {
-    console.error("Error al crear el pago:", error.message);
-    res.status(500).json({ 
-      success: false,
-      error: "Error al crear el pago",
-      details: error.message,
-      code: error.code || 'UNKNOWN_ERROR'
-    });
-  }
-};
-
-export const webhook = async (req, res) => {
-  try {
-    const { type, data } = req.body;
-    
-    if (type === "payment" && data.id) {
-      const payment = new Payment(client);
-      const paymentInfo = await payment.get({ id: data.id });
-
-      if (paymentInfo.status === "approved") {
-        const pedidoId = paymentInfo.external_reference;
-        
-        // 1. Actualizar estado del pedido
-        await actualizarEstadoPedido(pedidoId, paymentInfo);
-        
-        // 2. Reducir inventario
-        await reducirInventario(pedidoId);
-      }
-    }
-    res.sendStatus(200);
-  } catch (error) {
-    console.error("Error en webhook:", error);
-    res.sendStatus(200); // Siempre responder 200 a Mercado Pago
-  }
-};
-
-// Función para reducir el inventario
-const reducirInventario = async (pedidoId) => {
-  try {
-    // 1. Obtener los productos y cantidades del pedido
-    const [detalles] = await db.promise().query(
-      `SELECT producto_id, cantidad 
-       FROM detalle_pedidos 
-       WHERE id_pedido = ?`,
+    // 1. Obtener el total del pedido desde tu base de datos para seguridad
+    const [rows] = await db.promise().query(
+      'SELECT total FROM pedidos WHERE id_pedido = ?',
       [pedidoId]
     );
 
-    // 2. Actualizar el inventario para cada producto
-    for (const detalle of detalles) {
-      await db.promise().query(
-        `UPDATE productos 
-         SET cantidad = cantidad - ?,
-             updated_at = CURRENT_TIMESTAMP 
-         WHERE id_producto = ? AND cantidad >= ?`,
-        [detalle.cantidad, detalle.producto_id, detalle.cantidad]
-      );
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Pedido no encontrado' });
     }
 
-    console.log(`✅ Inventario actualizado para pedido ${pedidoId}`);
-  } catch (error) {
-    console.error("Error actualizando inventario:", error);
-    throw error;
-  }
-};
+    const totalPedido = rows[0].total;
 
-// Función para actualizar estado del pedido
-const actualizarEstadoPedido = async (pedidoId, paymentInfo) => {
-  try {
-    await db.promise().query(
-      `UPDATE pedidos 
-       SET estado = 'pagado',
-           payment_id = ?,
-           payment_status = 'approved',
-           payment_method = ?,
-           fecha_pago = CURRENT_TIMESTAMP
-       WHERE id_pedido = ?`,
-      [paymentInfo.id, paymentInfo.payment_method_id, pedidoId]
-    );
-  } catch (error) {
-    console.error("Error actualizando pedido:", error);
-    throw error;
-  }
-};
-
-export const verificarPago = async (req, res) => {
-  try {
-    const { payment_id, external_reference, preference_id } = req.query;
-
-    if (payment_id && process.env.MP_ACCESS_TOKEN) {
-      try {
-        const payment = new Payment(client);
-        const paymentInfo = await payment.get({ id: payment_id });
-
-        if (paymentInfo.external_reference) {
-          const updateQuery = `
-            UPDATE pedidos 
-            SET payment_id = ?, 
-                payment_status = ?,
-                payment_method = ?,
-                fecha_pago = NOW(),
-                estado = ?
-            WHERE id_pedido = ?
-          `;
-          
-          const estadoPedido = paymentInfo.status === 'approved' ? 'pagado' : 
-                              paymentInfo.status === 'pending' ? 'pendiente' : 'cancelado';
-          
-          db.query(
-            updateQuery,
-            [
-              paymentInfo.id,
-              paymentInfo.status,
-              paymentInfo.payment_method_id,
-              estadoPedido,
-              paymentInfo.external_reference
-            ],
-            (err) => {
-              if (err) console.error("Error actualizando pedido:", err);
-            }
-          );
-        }
-
-        res.json({
-          success: true,
-          status: paymentInfo.status,
-          pedido_id: paymentInfo.external_reference,
-          details: {
-            payment_method: paymentInfo.payment_method_id,
-            amount: paymentInfo.transaction_amount,
-            date: paymentInfo.date_created,
-            status_detail: paymentInfo.status_detail
-          }
-        });
-      } catch (mpError) {
-        // Fallback: verificar en BD local
-        verificarEnBD(external_reference || preference_id, res);
-      }
-    } else if (external_reference || preference_id) {
-      verificarEnBD(external_reference || preference_id, res);
-    } else {
-      res.status(400).json({
-        success: false,
-        error: "Faltan parámetros para verificar el pago"
-      });
-    }
-
-  } catch (error) {
-    console.error("Error al verificar pago:", error);
-    res.status(500).json({
-      success: false,
-      error: "Error al verificar el pago"
+    // 2. Crear la intención de pago en Stripe
+    // Stripe maneja los montos en la unidad monetaria más pequeña (centavos para USD/COP)
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(totalPedido * 100), // Convertir a centavos (o la unidad menor de tu moneda)
+      currency: 'cop', // Moneda colombiana
+      metadata: { pedidoId: pedidoId.toString() }, // Guardar el ID del pedido para referencia
+      payment_method_types: ['card'],
     });
+
+    // 3. Enviar el client_secret al frontend
+    res.json({ clientSecret: paymentIntent.client_secret });
+
+  } catch (error) {
+    console.error('Error al crear la intención de pago:', error);
+    res.status(500).json({ message: 'Error al procesar el pago' });
   }
 };
 
-function verificarEnBD(pedidoId, res) {
-  const query = pedidoId.includes('-') ? 
-    "SELECT * FROM pedidos WHERE payment_id = ?" :
-    "SELECT * FROM pedidos WHERE id_pedido = ?";
-    
-  db.query(
-    query,
-    [pedidoId],
-    (err, results) => {
-      if (err) {
-        return res.status(500).json({
-          success: false,
-          error: "Error al consultar pedido"
-        });
+// Manejar el webhook de Stripe para confirmar el pago
+export const stripeWebhook = async (req, res) => {
+  const sig = req.headers['stripe-signature'];
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    console.error(`❌ Error en la firma del webhook: ${err.message}`);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  // Manejar el evento
+  if (event.type === 'payment_intent.succeeded') {
+    const paymentIntentFromWebhook = event.data.object;
+    const pedidoId = paymentIntentFromWebhook.metadata.pedidoId;
+
+    try {
+      // --- LÍNEA CRÍTICA: ESTA ES LA CORRECCIÓN ---
+      // Recuperamos el PaymentIntent completo desde la API de Stripe
+      const paymentIntent = await stripe.paymentIntents.retrieve(
+        paymentIntentFromWebhook.id,
+        { expand: ['latest_charge'] } // Pedimos que incluya los detalles del cargo
+      );
+      // ---------------------------------------------
+
+      const paymentId = paymentIntent.id;
+      const charge = paymentIntent.latest_charge; // Usamos el cargo expandido
+      const cardBrand = charge.payment_method_details.card.brand;
+      const cardLast4 = charge.payment_method_details.card.last4;
+
+      console.log(`✅ Pago ${paymentId} exitoso para el pedido: ${pedidoId} con ${cardBrand} ${cardLast4}`);
+
+      // 1. Actualizar el estado del pedido
+      await db.promise().query(
+        `UPDATE pedidos 
+         SET 
+           estado = 'pagado', 
+           payment_id = ?,
+           payment_status = 'approved', 
+           payment_method = 'stripe', 
+           fecha_pago = NOW(),
+           card_brand = ?, 
+           card_last4 = ? 
+         WHERE id_pedido = ?`,
+        [paymentId, cardBrand, cardLast4, pedidoId]
+      );
+
+      // --- LÓGICA DE NOTIFICACIÓN CORREGIDA ---
+
+      // 1. Obtener detalles del pedido, incluyendo nombres de productos
+      const [detalles] = await db.promise().query(
+        `SELECT dp.cantidad, p.nombre, dp.producto_id
+         FROM detalle_pedidos dp 
+         JOIN productos p ON dp.producto_id = p.id_producto 
+         WHERE dp.id_pedido = ?`,
+        [pedidoId]
+      );
+
+      // 2. Actualizar el stock
+      for (const item of detalles) {
+        await db.promise().query(
+          'UPDATE productos SET cantidad = cantidad - ? WHERE id_producto = ?',
+          [item.cantidad, item.producto_id]
+        );
       }
-      
-      if (results.length > 0) {
-        res.json({
-          success: true,
-          status: results[0].payment_status || results[0].estado,
-          pedido_id: results[0].id_pedido,
-          fromDB: true
-        });
-      } else {
-        res.status(404).json({
-          success: false,
-          error: "Pedido no encontrado"
-        });
-      }
+      console.log(`📦 Stock actualizado para el pedido ${pedidoId}`);
+
+      // 3. Crear el mensaje de resumen para la notificación
+      const resumenMensaje = detalles.map(p => `${p.nombre} (x${p.cantidad})`).join(', ');
+
+      // 4. Obtener el id_usuario del pedido
+      const [pedidoRows] = await db.promise().query(
+        'SELECT id_usuario FROM pedidos WHERE id_pedido = ?',
+        [pedidoId]
+      );
+      const id_usuario = pedidoRows[0].id_usuario;
+
+      // 5. Registrar la notificación - CON PEDIDO_ID
+      await registrarNotificacion({
+        id_usuario: id_usuario,
+        tipo: 'compra_exitosa',
+        mensaje: `¡Tu compra del pedido #${pedidoId} ha sido aprobada! Productos: ${resumenMensaje}`,
+        fecha: new Date(),
+        pedido_id: pedidoId // <-- Aquí guardamos el ID del pedido
+      });
+      console.log(`🔔 Notificación de compra exitosa creada para el pedido ${pedidoId}`);
+
+    } catch (apiError) {
+      console.error(`🚨 Error al procesar el webhook para el pedido ${pedidoId}:`, apiError);
+      return res.sendStatus(500);
     }
-  );
-}
+  }
+
+  res.json({ received: true });
+};

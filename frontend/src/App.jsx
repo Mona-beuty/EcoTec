@@ -1,16 +1,20 @@
 // App.jsx - CON SUBMENÚS DESPLEGABLES
 import { useAuth } from "./context/AuthContext"; 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './App.css';
 import { useCart } from './context/CartContext'; 
 import logo from './assets/ecotec.png';
+import NotificacionPanel from './components/NotificacionPanel';
 
 const App = () => {
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+  const [isNotificacionPanelOpen, setIsNotificacionPanelOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   const { cart } = useCart();
   const { user, logout } = useAuth(); 
@@ -41,12 +45,79 @@ const App = () => {
     e.preventDefault();
     if (searchTerm.trim()) {
       navigate(`/buscar?query=${encodeURIComponent(searchTerm)}`);
-      setSearchTerm("");
+      setSearchTerm(""); 
+      setShowSearch(false); // 👈 cierro modal después de buscar
     }
   };
 
+  const toggleNotificacionPanel = () => {
+    setIsNotificacionPanelOpen(!isNotificacionPanelOpen);
+  };
+
+  const closeNotificacionPanel = () => {
+    setIsNotificacionPanelOpen(false);
+  };
+
+  // Actualiza el contador de notificaciones no leídas
+  const fetchUnreadCount = async () => {
+    if (!user) {
+      setUnreadCount(0);
+      return;
+    }
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:5000/api/notificaciones', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      const data = await response.json();
+      // Filtra según el rol
+      let notificacionesFiltradas;
+      if (user.rol === 'admin') {
+        notificacionesFiltradas = data.filter(n =>
+          ['venta', 'reparacion', 'reparacion_actualizada'].includes(n.tipo)
+        );
+      } else {
+        notificacionesFiltradas = data.filter(n =>
+          !['venta', 'reparacion'].includes(n.tipo)
+        );
+      }
+      setUnreadCount(notificacionesFiltradas.filter(n => !n.leida).length);
+    } catch {
+      setUnreadCount(0);
+    }
+  };
+
+  useEffect(() => {
+    fetchUnreadCount();
+    
+    // Escuchar eventos personalizados para actualizar el badge
+    const handleNotificacionLeida = () => {
+      fetchUnreadCount();
+    };
+    
+    // Actualizar notificaciones cada 30 segundos para usuarios normales
+    const interval = setInterval(() => {
+      if (user && user.rol !== 'admin') {
+        fetchUnreadCount();
+      }
+    }, 30000);
+    
+    window.addEventListener('notificacionLeida', handleNotificacionLeida);
+    
+    return () => {
+      window.removeEventListener('notificacionLeida', handleNotificacionLeida);
+      clearInterval(interval);
+    };
+  }, [isNotificacionPanelOpen, user]);
+
   return (
     <>
+      <NotificacionPanel 
+        isOpen={isNotificacionPanelOpen}
+        onClose={closeNotificacionPanel}
+        onUpdateUnread={fetchUnreadCount}
+      />
+      {/* ...existing code... */}
       <nav className="custom-navbar">
         <div className="top-bar">
           <div className="left-section">
@@ -67,9 +138,24 @@ const App = () => {
   </div>
 
   {/* 🔔 Notificaciones */}
-  <Link to="/notificaciones" className="notification-icon">
-    <i className="bi bi-bell"></i>
-  </Link>
+  {user ? (
+    <button 
+      onClick={toggleNotificacionPanel}
+      className="notification-icon"
+      style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', position: 'relative' }}
+    >
+      <i className="bi bi-bell"></i>
+      {unreadCount > 0 && (
+        <span className="notification-badge">
+          {unreadCount}
+        </span>
+      )}
+    </button>
+  ) : (
+    <Link to="/notificaciones" className="notification-icon">
+      <i className="bi bi-bell"></i>
+    </Link>
+  )}
 
   {/* ⭐ Favoritos */}
   <Link to="/favoritos"><i className="bi bi-star"></i></Link>
@@ -183,18 +269,47 @@ const App = () => {
           </ul>
           
           <div className="nav-actions">
-            <form className="search-form" onSubmit={handleSearch}>
-              <input 
-                type="text" 
-                className="search-input" 
-                placeholder="Buscar..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <button type="submit" className="search-button">
-                <i className="bi bi-search"></i>
-              </button>
-            </form>
+            {/* 🔍 Icono de búsqueda */}
+           <div 
+                className="search-toggle"
+                onClick={() => setShowSearch(true)}  // 👈 abre modal
+                  >
+                 <i className="bi bi-search"></i>
+          </div>
+         {showSearch && (
+  <div className="search-overlay">
+    <div className="search-box">
+      <button 
+        className="close-search" 
+        onClick={() => {
+          setShowSearch(false);
+           // 👈 limpio resultado al cerrar
+        }}
+      >
+        <i className="bi bi-x"></i>
+      </button>
+
+      {/* 👇 Condicional: si hay resultado, lo muestro; si no, el input */}
+      { (
+        <form onSubmit={handleSearch} className="search-modal-form">
+          <input
+            type="text"
+            placeholder="Buscar aquí..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            autoFocus
+          />
+          <button type="submit">
+            <i className="bi bi-search"></i>
+          </button>
+        </form>
+      )}
+    </div>
+  </div>
+)}
+
+
+
             
             {user ? (
               <>

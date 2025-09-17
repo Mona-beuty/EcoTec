@@ -15,6 +15,7 @@ const VenderDispositivo = () => {
   
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -68,28 +69,64 @@ const VenderDispositivo = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const isAuthenticated = !!localStorage.getItem("token"); // O usa tu contexto de auth
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!isAuthenticated) {
+      setFormData({
+        nombreDispositivo: '',
+        marca: '',
+        modelo: '',
+        estado: '',
+        descripcion: '',
+        contacto: '',
+        imagen: null
+      });
+      setErrors({});
+      return;
+    }
     const newErrors = validateForm();
-    
+
     if (Object.keys(newErrors).length === 0) {
-      // Aquí enviarías los datos al servidor
-      console.log('Formulario enviado:', formData);
-      setSubmitted(true);
-      
-      // Reset form después de 3 segundos
-      setTimeout(() => {
-        setSubmitted(false);
-        setFormData({
-          nombreDispositivo: '',
-          marca: '',
-          modelo: '',
-          estado: '',
-          descripcion: '',
-          contacto: '',
-          imagen: null
+      setIsLoading(true); // <-- Mostrar spinner
+      const formDataToSend = new FormData();
+      formDataToSend.append('nombreDispositivo', formData.nombreDispositivo);
+      formDataToSend.append('marca', formData.marca);
+      formDataToSend.append('modelo', formData.modelo);
+      formDataToSend.append('estado', formData.estado);
+      formDataToSend.append('descripcion', formData.descripcion);
+      formDataToSend.append('contacto', formData.contacto);
+      if (formData.imagen) {
+        formDataToSend.append('imagen', formData.imagen);
+      }
+
+      try {
+        await fetch('http://localhost:5000/api/ventas/vender', {
+          method: 'POST',
+          body: formDataToSend,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+          }
         });
-      }, 3000);
+        setSubmitted(true);
+        setTimeout(() => {
+          setSubmitted(false);
+          setFormData({
+            nombreDispositivo: '',
+            marca: '',
+            modelo: '',
+            estado: '',
+            descripcion: '',
+            contacto: '',
+            imagen: null
+          });
+        }, 3000);
+      } catch (error) {
+        alert('Error enviando el formulario');
+      } finally {
+        setIsLoading(false); // <-- Ocultar spinner
+      }
     } else {
       setErrors(newErrors);
     }
@@ -306,10 +343,20 @@ const VenderDispositivo = () => {
               />
             </div>
 
-            <button type="button" onClick={handleSubmit} className="vender-submit-button">
-              <Smartphone className="vender-button-icon" />
-              Enviar información
+            <button type="button" onClick={handleSubmit} className="vender-submit-button" disabled={isLoading}>
+              {isLoading ? "Enviando..." : <>
+                <Smartphone className="vender-button-icon" />
+                Enviar información
+              </>}
             </button>
+
+            {!isAuthenticated && (
+              <div className="vender-auth-warning">
+                <AlertCircle className="vender-error-icon" />
+                <span>Debes iniciar sesión para enviar la solicitud.</span>
+                <a href="/login" className="vender-login-link">Iniciar sesión</a>
+              </div>
+            )}
           </div>
         </div>
       </div>

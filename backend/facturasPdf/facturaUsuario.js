@@ -16,7 +16,7 @@ export const generateInvoicePDF = async (req, res) => {
   try {
     // Obtener datos del pedido con detalles
     db.query(
-      `SELECT p.id_pedido, p.total, p.total_envio, p.fecha_pedido, p.payment_method,
+      `SELECT p.id_pedido, p.total, p.total_envio, p.fecha_pedido, p.card_brand,
           u.nombre, u.email, u.celular,
           d.direccion, d.direccion_complementaria, d.ciudad, d.codigo_postal, d.pais
        FROM pedidos p
@@ -67,96 +67,143 @@ export const generateInvoicePDF = async (req, res) => {
               });
             });
 
-            // HEADER - Logo y datos de la empresa
-            doc.fontSize(20).fillColor('#2c3e50').text('ECOTEC', 50, 50);
-            doc.fontSize(10).fillColor('#666')
-               .text('www.EcoTec.com', 50, 75)
-               .text('EcoTec@dispositivos.com', 50, 90)
-               .text('Tel: +57 123 456 7890', 50, 105);
-
-            // TÍTULO FACTURA
-            doc.fontSize(24).fillColor('#e74c3c').text('FACTURA', 400, 50);
-            doc.fontSize(12).fillColor('#333')
-               .text(`Pedido #: ${pedido.id_pedido}`, 400, 80)
-               .text(`Fecha: ${new Date(pedido.fecha_pedido).toLocaleDateString('es-CO')}`, 400, 100);
-
-            // LÍNEA SEPARADORA
-            doc.strokeColor('#ddd').lineWidth(1)
-               .moveTo(50, 140).lineTo(550, 140).stroke();
-
-            // DATOS DEL CLIENTE
-            let yPosition = 160;
-            doc.fontSize(14).fillColor('#2c3e50').text('DATOS DEL CLIENTE:', 50, yPosition);
-            yPosition += 25;
+            // HEADER - Logo y datos de la empresa con diseño corporativo
+            // Fondo del header con gradiente corporativo
+            doc.rect(0, 0, 612, 130).fill('#1e3a5f');
             
-            doc.fontSize(11).fillColor('#333')
-               .text(`Nombre: ${pedido.nombre}`, 50, yPosition)
-               .text(`Email: ${pedido.email}`, 50, yPosition + 15)
-               .text(`Celular: ${pedido.celular || 'No especificado'}`, 50, yPosition + 30);
+            // Logo y nombre de la empresa
+            doc.fontSize(28).fillColor('#ffffff').text('ECOTEC', 50, 40, { characterSpacing: 2 });
+            doc.fontSize(10).fillColor('#e8f4f8')
+               .text('Tecnología Sostenible para el Futuro', 50, 70)
+               .text('EcoTec@dispositivos.com  |  +57 123 456 7890  |  www.EcoTec.com', 50, 85);
+
+            // Marco decorativo con color corporativo
+            doc.rect(40, 30, 532, 80).stroke('#00b3b3').lineWidth(2);
+
+            // TÍTULO FACTURA con diseño corporativo
+            // Fondo para el título
+            doc.rect(400, 30, 150, 80).fill('#00b3b3');
+            doc.fontSize(24).fillColor('#ffffff').text('FACTURA', 415, 50);
+            
+            // Información del pedido en una caja elegante
+            doc.rect(400, 115, 150, 50).fill('#f8f9fa').stroke('#00b3b3');
+            doc.fontSize(11).fillColor('#002366')
+               .text(`Pedido #: ${pedido.id_pedido}`, 410, 125)
+               .text(`Fecha: ${new Date(pedido.fecha_pedido).toLocaleDateString('es-CO')}`, 410, 140)
+               .text('Estado: PAGADO', 410, 155);
+
+            // LÍNEA SEPARADORA decorativa con colores corporativos
+            doc.strokeColor('#00b3b3').lineWidth(3)
+               .moveTo(50, 180).lineTo(550, 180).stroke();
+            doc.strokeColor('#f58c0b').lineWidth(1)
+               .moveTo(50, 185).lineTo(550, 185).stroke();
+
+            // DATOS DEL CLIENTE con diseño mejorado
+            let yPosition = 200;
+            
+            // Caja para datos del cliente
+            doc.rect(50, yPosition, 250, 120).fill('#f8f9fa').stroke('#dee2e6');
+            
+            doc.fontSize(14).fillColor('#002366').text('DATOS DEL CLIENTE', 60, yPosition + 10);
+            yPosition += 35;
+            
+            doc.fontSize(10).fillColor('#333333')
+               .text(`Nombre: ${pedido.nombre}`, 60, yPosition)
+               .text(`Email: ${pedido.email}`, 60, yPosition + 15)
+               .text(`Celular: ${pedido.celular || 'No especificado'}`, 60, yPosition + 30);
 
             if (pedido.direccion) {
-              doc.text(`Dirección: ${pedido.direccion}`, 50, yPosition + 45);
+              doc.text(`Dirección: ${pedido.direccion}`, 60, yPosition + 45);
               if (pedido.direccion_complementaria) {
-                doc.text(`${pedido.direccion_complementaria}`, 50, yPosition + 60);
+                doc.text(`${pedido.direccion_complementaria}`, 60, yPosition + 60);
                 yPosition += 15;
               }
-              doc.text(`${pedido.ciudad}, ${pedido.codigo_postal}, ${pedido.pais}`, 50, yPosition + 60);
+              doc.text(`${pedido.ciudad}, ${pedido.codigo_postal}, ${pedido.pais}`, 60, yPosition + 60);
               yPosition += 30;
             }
 
-            yPosition += 60;
+            yPosition = 330; // Ajustar posición para la siguiente sección
 
-            // TABLA DE PRODUCTOS
-            doc.fontSize(14).fillColor('#2c3e50').text('DETALLES DEL PEDIDO:', 50, yPosition);
+            // TABLA DE PRODUCTOS con diseño corporativo
+            doc.fontSize(14).fillColor('#002366').text('DETALLES DEL PEDIDO', 50, yPosition);
             yPosition += 30;
 
-            // Headers de la tabla
-            doc.fontSize(10).fillColor('#fff')
-               .rect(50, yPosition, 500, 25).fill('#34495e');
+            // Headers de la tabla con colores corporativos
+            doc.rect(50, yPosition, 500, 30).fill('#1e3a5f');
+            doc.rect(50, yPosition, 500, 3).fill('#00b3b3'); // Línea turquesa superior
             
-            doc.fillColor('#fff')
-               .text('Producto', 60, yPosition + 8)
-               .text('Cantidad', 300, yPosition + 8)
-               .text('Precio Unit.', 380, yPosition + 8)
-               .text('Subtotal', 460, yPosition + 8);
+            doc.fillColor('#ffffff').fontSize(11)
+               .text('Producto', 60, yPosition + 10)
+               .text('Cant.', 300, yPosition + 10)
+               .text('Precio Unit.', 380, yPosition + 10)
+               .text('Subtotal', 460, yPosition + 10);
 
-            yPosition += 25;
+            yPosition += 30;
 
-            // Filas de productos
+            // Filas de productos con mejor diseño
             let subtotalPedido = 0;
             productos.forEach((producto, index) => {
               const subtotalProducto = producto.cantidad * producto.precio_unitario;
               subtotalPedido += subtotalProducto;
 
               const bgColor = index % 2 === 0 ? '#f8f9fa' : '#ffffff';
-              doc.rect(50, yPosition, 500, 20).fill(bgColor);
+              doc.rect(50, yPosition, 500, 25).fill(bgColor).stroke('#e9ecef');
 
-              doc.fillColor('#333').fontSize(9)
-                .text(producto.nombre, 60, yPosition + 6)
-                .text(producto.cantidad.toString(), 300, yPosition + 6)
-                .text(`$${Number(producto.precio_unitario).toLocaleString('es-CO')}`, 380, yPosition + 6)
-                .text(`$${subtotalProducto.toLocaleString('es-CO')}`, 460, yPosition + 6);
+              doc.fillColor('#333333').fontSize(10)
+                .text(producto.nombre, 60, yPosition + 8, { width: 230 })
+                .text(producto.cantidad.toString(), 300, yPosition + 8)
+                .text(`$${Number(producto.precio_unitario).toLocaleString('es-CO')}`, 380, yPosition + 8)
+                .fillColor('#00b3b3').fontSize(10)
+                .text(`$${subtotalProducto.toLocaleString('es-CO')}`, 460, yPosition + 8);
 
-              yPosition += 20;
+              yPosition += 25;
             });
 
-            // TOTALES
+            // TOTALES con diseño corporativo
             yPosition += 20;
-            doc.fontSize(12).fillColor('#2c3e50')
-               .text(`Subtotal: $${Number(subtotalPedido).toLocaleString('es-CO')} COP`, 350, yPosition)
-               .text(`Envío: $${Number(pedido.total_envio).toLocaleString('es-CO')} COP`, 350, yPosition + 20)
-               .fontSize(14).fillColor('#e74c3c')
-               .text(`TOTAL: $${Number(pedido.total).toLocaleString('es-CO')} COP`, 350, yPosition + 45);
+            
+            // Caja para totales
+            doc.rect(320, yPosition, 230, 90).fill('#f8f9fa').stroke('#00b3b3');
+            
+            doc.fontSize(11).fillColor('#002366')
+               .text(`Subtotal:`, 330, yPosition + 15)
+               .text(`$${Number(subtotalPedido).toLocaleString('es-CO')} COP`, 450, yPosition + 15)
+               .text(`Envío:`, 330, yPosition + 35)
+               .text(`$${Number(pedido.total_envio).toLocaleString('es-CO')} COP`, 450, yPosition + 35);
+               
+            // Línea separadora
+            doc.strokeColor('#00b3b3').lineWidth(1)
+               .moveTo(330, yPosition + 55).lineTo(540, yPosition + 55).stroke();
+               
+            doc.fontSize(14).fillColor('#002366')
+               .text(`TOTAL:`, 330, yPosition + 65)
+               .fontSize(16).fillColor('#00b3b3')
+               .text(`$${Number(pedido.total).toLocaleString('es-CO')} COP`, 450, yPosition + 65);
 
-            // MÉTODO DE PAGO
-            yPosition += 80;
-            doc.fontSize(11).fillColor('#666')
-               .text(`Método de pago: ${pedido.payment_method || 'No especificado'}`, 50, yPosition);
+            // MÉTODO DE PAGO con diseño corporativo
+            yPosition += 110;
+            
+            // Caja para método de pago
+            doc.rect(50, yPosition, 200, 35).fill('#e8f7f7').stroke('#00b3b3');
+            doc.fontSize(10).fillColor('#002366')
+               .text('Método de pago:', 60, yPosition + 8)
+               .fontSize(12).fillColor('#00b3b3')
+               .text(`${pedido.card_brand ? pedido.card_brand.charAt(0).toUpperCase() + pedido.card_brand.slice(1) : 'No especificado'}`, 60, yPosition + 20);
 
-            // FOOTER
-            doc.fontSize(8).fillColor('#999')
-               .text('Gracias por tu compra. Si tienes alguna pregunta, no dudes en contactarnos.', 50, yPosition + 40)
-               .text('Este documento es una factura válida.', 50, yPosition + 55);
+            // FOOTER con diseño corporativo
+            yPosition += 50;
+            
+            // Línea decorativa
+            doc.strokeColor('#00b3b3').lineWidth(2)
+               .moveTo(50, yPosition).lineTo(550, yPosition).stroke();
+            
+            // Fondo del footer
+            doc.rect(0, yPosition + 10, 612, 60).fill('#1e3a5f');
+            
+            doc.fontSize(9).fillColor('#e8f4f8')
+               .text('¡Gracias por elegir ECOTEC! Tu confianza impulsa nuestro compromiso con la sostenibilidad.', 50, yPosition + 25)
+               .text('Este documento es una factura válida y cumple con todos los requisitos legales.', 50, yPosition + 40)
+               .text('Soporte: +57 123 456 7890  |  soporte@ecotec.com  |  www.ecotec.com', 50, yPosition + 55);
 
             // Finalizar el documento
             doc.end();
