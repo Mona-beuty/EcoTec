@@ -33,5 +33,6 @@ out/
 .tmp/
 
 # Archivos de entorno
+.env
 backend/.env
 frontend/.env
