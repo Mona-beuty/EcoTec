@@ -1,0 +1,276 @@
+/* src/style/HistorialFacturas.css */
+
+/* Encapsulamiento para evitar conflictos con otras hojas de estilo */
+.historial-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #f8f9ff 0%, #e8f4fd 100%);
+  padding: 0 2rem 0 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 100px;
+}
+
+.historial-wrapper .historial-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  background-color: transparent;
+  padding: 0 20px 0 20px;
+  font-family: Arial, sans-serif;
+}
+
+.historial-wrapper .historial-card {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  margin-top: 0;
+  max-width: 900px;
+  width: 100%;
+  position: relative;
+}
+
+.historial-wrapper .historial-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333333;
+  margin: 0 0 25px 0;
+  text-align: left;
+}
+
+.historial-wrapper .table-container {
+  margin-bottom: 30px;
+  overflow-x: auto;
+}
+
+.historial-wrapper .facturas-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.historial-wrapper .table-header {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+
+.historial-wrapper .table-header th {
+  padding: 12px 8px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border-right: 1px solid #dee2e6;
+}
+
+.historial-wrapper .table-header th:last-child {
+  border-right: none;
+}
+
+
+.historial-wrapper .table-row {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.historial-wrapper .table-row:hover {
+  background-color: #f8f9fa;
+}
+
+.historial-wrapper .table-row td {
+  padding: 12px 8px;
+  color: #333333;
+  border-right: 1px solid #e9ecef;
+}
+
+.historial-wrapper .table-row td:last-child {
+  border-right: none;
+}
+/* Estilos para el Modal de Confirmación */
+.historial-wrapper .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.historial-wrapper .modal-content {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 450px;
+  width: 90%;
+  overflow: hidden;
+  animation: slideIn 0.3s ease-out;
+}
+
+.historial-wrapper .modal-header {
+  padding: 25px 30px 0 30px;
+  text-align: center;
+}
+
+.historial-wrapper .modal-header h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333333;
+  margin: 0;
+}
+
+.historial-wrapper .modal-body {
+  padding: 20px 30px 25px 30px;
+  text-align: center;
+}
+
+.historial-wrapper .modal-icon {
+  margin-bottom: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.historial-wrapper .modal-body p {
+  font-size: 14px;
+  color: #333333;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+}
+
+.historial-wrapper .modal-body strong {
+  color: #495057;
+  font-weight: 600;
+}
+
+.historial-wrapper .modal-subtitle {
+  font-size: 13px !important;
+  color: #666666 !important;
+  margin: 0 !important;
+}
+
+.historial-wrapper .modal-actions {
+  display: flex;
+  border-top: 1px solid #dee2e6;
+}
+
+.historial-wrapper .btn-cancel,
+.historial-wrapper .btn-confirm {
+  flex: 1;
+  padding: 15px 20px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.historial-wrapper .btn-cancel {
+  background: #f8f9fa;
+  color: #495057;
+  border-right: 1px solid #dee2e6;
+}
+
+.historial-wrapper .btn-cancel:hover:not(:disabled) {
+  background: #e9ecef;
+  color: #333333;
+}
+
+.historial-wrapper .btn-confirm {
+  background: #ffffff;
+  color: #495057;
+}
+
+.historial-wrapper .btn-confirm:hover:not(:disabled) {
+  background: #f8f9fa;
+  color: #333333;
+}
+
+.historial-wrapper .btn-cancel:disabled,
+.historial-wrapper .btn-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Spinner de carga */
+.historial-wrapper .loading-spinner,
+.historial-wrapper .spinner-download {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #e9ecef;
+  border-top: 2px solid #495057;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive para modal */
+@media (max-width: 768px) {
+  .historial-wrapper .modal-content {
+    margin: 20px;
+    max-width: none;
+  }
+  .historial-wrapper .modal-header,
+  .historial-wrapper .modal-body {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .historial-wrapper .modal-actions {
+    flex-direction: column;
+  }
+  .historial-wrapper .btn-cancel {
+    border-right: none;
+    border-bottom: 1px solid #dee2e6;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .historial-wrapper .historial-container {
+    padding: 20px 10px;
+  }
+  .historial-wrapper .historial-card {
+    padding: 20px;
+  }
+  .historial-wrapper .facturas-table {
+    font-size: 12px;
+  }
+  .historial-wrapper .table-header th,
+  .historial-wrapper .table-row td {
+    padding: 8px 4px;
+  }
+}
